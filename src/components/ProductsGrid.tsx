@@ -11,7 +11,6 @@ export default function ProductsGrid() {
           key={cat.slug}
           href={`/products/${cat.slug}`}
           className="product-list-card"
-          aria-label={`View ${cat.shortTitle} sourcing capability`}
         >
           <div className="product-list-media">
             <Image
@@ -35,7 +34,7 @@ export default function ProductsGrid() {
               )}
             </div>
             <div className="text-link">
-              View capability <ArrowRight size={14} aria-hidden="true" />
+              View capabilities <ArrowRight size={14} aria-hidden="true" />
             </div>
           </div>
         </Link>

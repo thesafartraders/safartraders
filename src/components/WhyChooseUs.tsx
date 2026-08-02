@@ -7,7 +7,7 @@ const supportingPoints = [
   {
     icon: Users,
     title: "Supplier fit review",
-    description: "We check supplier suitability, track record, and availability before any requirement moves toward quotation.",
+    description: "We check supplier suitability, track record, and sourcing feasibility before any requirement moves toward quotation.",
   },
   {
     icon: SearchCheck,
@@ -17,7 +17,7 @@ const supportingPoints = [
   {
     icon: FileCheck,
     title: "Documentation awareness",
-    description: "Export documentation — Bill of Lading, Certificate of Origin, packing list, and inspection reports — is planned in from the start.",
+    description: "Export documentation — Bill of Lading, Certificate of Origin, Packing List, and inspection reports — is planned in from the start.",
   },
   {
     icon: Package,
@@ -60,7 +60,7 @@ export default function WhyChooseUs({ showHeader = true }: WhyChooseUsProps) {
             <span className="why-feature-tag">Our edge</span>
             <h3>R&amp;D-led requirement research before quotation.</h3>
             <p>
-              Before quoting, we use R&amp;D-style research and development review to study the
+              Before quoting, we use a research and development review to study the
               buyer&rsquo;s requirement, compare supplier fit, check product suitability, and confirm
               quality expectations. This helps buyers avoid wrong items, unsuitable materials, and
               low-quality supply — so every quotation is grounded in sourcing context that actually

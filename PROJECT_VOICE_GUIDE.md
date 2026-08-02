@@ -1,4 +1,4 @@
-# Safar Exports — Project Voice Guide
+# Safar Traders — Project Voice Guide
 
 This file governs the wording, tone, and brand narrative for all website copy,
 component edits, and AI-assisted content changes. Any Claude or Codex session
@@ -8,20 +8,20 @@ working on this codebase should read this first.
 
 ## 1. Business Positioning
 
-Safar Exports is a **procurement and export partner** for buyers of non-perishable
+Safar Traders is a **procurement and export partner** for buyers of non-perishable
 industrial and commercial goods.
 
 The company coordinates buyer requirements through a structured process:
 supplier identification → quotation → order confirmation → inspection → documentation → supply/shipment.
 
-**What Safar Exports is:**
+**What Safar Traders is:**
 - Procurement and export partner
 - Multi-category sourcing partner
 - Merchant exporter
 - Trading and export partner
 - Single point of coordination for trade and supply
 
-**What Safar Exports is not (internal reference — do not repeat on every public page):**
+**What Safar Traders is not (internal reference — do not repeat on every public page):**
 - Not a manufacturer
 - Not an e-commerce store
 - Not a recycling or scrap-yard business
@@ -36,7 +36,7 @@ About page, Resources, RFQ guidance, and the chatbot system prompt.
 ## 2. Brand Narrative (use once — About page only)
 
 > "Buyers should not have to manage multiple suppliers, documentation partners, and
-> shipment coordination separately. Safar Exports brings sourcing, procurement
+> shipment coordination separately. Safar Traders brings sourcing, procurement
 > coordination, documentation support, and supply handling into one clear commercial process."
 
 This is the core brand idea. It should appear once in full — currently on the About page
@@ -101,7 +101,7 @@ Use these words and phrases:
 - **Buyer-facing, not self-promotional.** Every sentence should be useful to the buyer, not just reassuring to the company.
 - **Concise.** No paragraph longer than 3 sentences in body copy. Avoid stacking adjectives.
 - **No hype.** Do not use exclamation marks in body copy. Do not over-promise.
-- **Consistent person.** Use "we" and "our" for Safar Exports. Use "you" and "your" for the buyer. Avoid third-person references to "the company" in public-facing copy.
+- **Consistent person.** Use "we" and "our" for Safar Traders. Use "you" and "your" for the buyer. Avoid third-person references to "the company" in public-facing copy.
 - **No AI-sounding copy.** Avoid phrases like "seamlessly", "cutting-edge", "leverage", "robust", "state-of-the-art", "end-to-end solution" (unless used plainly).
 
 ---
@@ -111,7 +111,7 @@ Use these words and phrases:
 ### Homepage (`src/app/page.tsx` + `src/components/Hero.tsx`)
 - Hero headline: concise, buyer-benefit focused
 - Hero copy: short positioning only — one paragraph maximum
-- Keep hero copy close to: "Safar Exports supports buyer-led sourcing, procurement coordination, and export supply for non-perishable industrial and commercial requirements."
+- Keep hero copy close to: "Safar Traders supports buyer-led sourcing, procurement coordination, and export supply for non-perishable industrial and commercial requirements."
 - Do NOT repeat the brand narrative paragraph here (it lives on About)
 - Do NOT explain the whole operating model in the hero
 - Proof strip cards: three short operational signals (sourcing, documentation, supply scope)

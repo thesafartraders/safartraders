@@ -6,6 +6,8 @@ import { siteConfig } from "@/lib/site-config";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return resourceGuides.map((guide) => ({ slug: guide.slug }));
 }
@@ -13,7 +15,8 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const guide = getResourceGuide(slug);
-  if (!guide) return {};
+  if (!guide) return { title: "Guide not found", robots: { index: false, follow: false } };
+  const imageUrl = `${siteConfig.url}/og/${guide.slug}`;
 
   return {
     title: guide.seoTitle,
@@ -24,11 +27,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: guide.metaDescription,
       url: `${siteConfig.url}/resources/${guide.slug}`,
       type: "article",
+      locale: "en_US",
+      siteName: siteConfig.name,
       publishedTime: guide.datePublished,
       modifiedTime: guide.dateModified,
       images: [
         {
-          url: siteConfig.ogImage,
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: `${guide.title} by ${siteConfig.name}`,
@@ -39,7 +44,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: "summary_large_image",
       title: guide.seoTitle,
       description: guide.metaDescription,
-      images: [siteConfig.ogImage],
+      images: [imageUrl],
     },
   };
 }

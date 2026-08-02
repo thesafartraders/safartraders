@@ -1,23 +1,33 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowLeft, Check, MessageCircle, X } from "lucide-react";
 import { resourceGuides, type ResourceGuide } from "@/lib/resources";
 import { siteConfig } from "@/lib/site-config";
+import { waLink } from "@/lib/whatsapp";
 import RFQWizardLauncher from "./RFQWizardLauncher";
 
 export default function ResourceGuidePage({ guide }: { guide: ResourceGuide }) {
-  const related = resourceGuides.filter((g) => g.slug !== guide.slug).slice(0, 3);
+  const relatedBySlug = (guide.relatedSlugs ?? [])
+    .map((slug) => resourceGuides.find((candidate) => candidate.slug === slug))
+    .filter((candidate): candidate is ResourceGuide => Boolean(candidate));
+  const related = [
+    ...relatedBySlug,
+    ...resourceGuides.filter((g) => g.slug !== guide.slug && g.category === guide.category),
+    ...resourceGuides.filter((g) => g.slug !== guide.slug && !relatedBySlug.some((relatedGuide) => relatedGuide.slug === g.slug)),
+  ].filter((g, index, guides) => guides.findIndex((candidate) => candidate.slug === g.slug) === index).slice(0, 3);
   const guideUrl = `${siteConfig.url}/resources/${guide.slug}`;
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": `${guideUrl}#article`,
     headline: guide.title,
     description: guide.metaDescription,
-    author: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
-    publisher: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
+    author: { "@id": `${siteConfig.url}/#organization` },
+    publisher: { "@id": `${siteConfig.url}/#organization` },
     mainEntityOfPage: guideUrl,
     datePublished: guide.datePublished,
     dateModified: guide.dateModified,
-    image: `${siteConfig.url}${siteConfig.ogImage}`,
+    image: `${siteConfig.url}${guide.image.src}`,
   };
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -40,9 +50,18 @@ export default function ResourceGuidePage({ guide }: { guide: ResourceGuide }) {
             <ArrowLeft size={14} aria-hidden="true" /> All buyer resources
           </Link>
           <span className="eyebrow">{guide.category}</span>
-          <h1 className="guide-title">{guide.title}</h1>
-          <p className="guide-summary">{guide.summary}</p>
-          <span className="guide-readtime">{guide.readTime}</span>
+          <div className="guide-hero-content">
+            <div>
+              <h1 className="guide-title">{guide.title}</h1>
+              <p className="guide-summary">{guide.summary}</p>
+              <span className="guide-readtime">
+                {guide.readTime} · Updated {new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(new Date(`${guide.dateModified}T00:00:00Z`))}
+              </span>
+            </div>
+            <div className="guide-hero-image-wrap">
+              <Image src={guide.image} alt={guide.imageAlt} className="guide-hero-image" priority />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -90,6 +109,19 @@ export default function ResourceGuidePage({ guide }: { guide: ResourceGuide }) {
               <span className="guide-why-label">Why it matters</span>
               <p>{guide.why}</p>
             </div>
+
+            {guide.links && guide.links.length > 0 && (
+              <nav className="guide-links" aria-label="Related resources">
+                <span className="guide-links-label">Keep reading</span>
+                <ul>
+                  {guide.links.map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href}>{link.label}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )}
           </article>
 
           <aside className="guide-sidebar">
@@ -98,9 +130,9 @@ export default function ResourceGuidePage({ guide }: { guide: ResourceGuide }) {
               <p className="sidebar-info-copy">
                 Send your product, quantity, destination, and timeline — we&apos;ll review feasibility before discussing terms.
               </p>
-              <RFQWizardLauncher label="Request Quote" className="btn btn-primary" />
+              <RFQWizardLauncher label="Request a Quote" className="btn btn-primary" />
               <a
-                href={`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}`}
+                href={waLink(siteConfig.whatsappRaw)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-secondary"

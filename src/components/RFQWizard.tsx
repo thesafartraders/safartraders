@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { ArrowRight, ArrowLeft, Check, Loader2, X, Search } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { productCategories } from "@/lib/products";
 import { Country, State } from "country-state-city";
-import PhoneInput from "react-phone-number-input";
+import PhoneInput, { isPossiblePhoneNumber } from "react-phone-number-input";
 import type { Value as PhoneValue } from "react-phone-number-input";
 import type { RfqSubmitResponse } from "@/lib/rfq";
 import "react-phone-number-input/style.css";
@@ -13,16 +13,85 @@ import "react-phone-number-input/style.css";
 // ── Static data ────────────────────────────────────────────────────────────────
 
 const PRODUCT_SUGGESTIONS = [
-  ...productCategories.map((c) => c.shortTitle),
   "20 MT Raw Materials",
   "2 Containers",
   "Monthly Supply",
   "Industrial Equipment",
-  "Petroleum Products",
   "Metal Products",
   "Construction Materials",
-  "All Types of Trading & Export Requirements",
+  "Other industrial requirement",
 ];
+
+// Map category shortTitle → product examples drawn from subcategory examples
+const CATEGORY_PRODUCT_SUGGESTIONS: Record<string, string[]> = {
+  "Swimming Pool Solutions": [
+    "Swimming pool chemicals", "Pool filtration system", "Pool circulation pump",
+    "Pool cleaning equipment", "Pool lighting", "Pool heating equipment",
+    "Pool safety equipment", "Pool accessories",
+  ],
+  "Metals & Alloys": [
+    "Mild steel sheets", "Structural steel sections", "HR/CR coils", "Steel plates",
+    "Aluminium ingots", "Aluminium sheets", "Aluminium extrusions", "Aluminium coils",
+    "Copper cathodes", "Copper rods", "Copper wire bars",
+    "Brass rods", "Brass sheets", "Brass fittings",
+    "SS 304 sheets", "SS 316 coils", "SS pipes and tubes",
+    "Zinc ingots", "Lead ingots", "Nickel 200 rounds", "Inconel plates", "Monel rods",
+  ],
+  "Industrial Scrap": [
+    "HMS 1 & 2", "Zorba", "Aluminium scrap", "Copper scrap", "Brass scrap",
+    "Cast iron scrap", "Stainless steel scrap",
+    "PET bottle scrap", "HDPE scrap", "PP regrind", "PVC scrap", "ABS regrind",
+    "OCC (Old Corrugated Cartons)", "ONP (Old Newsprint)", "Cardboard bales",
+    "Tyre scrap (TDF)", "Rubber crumb feedstock", "EPDM scrap",
+    "PCB boards", "Motherboards", "Cable wire scrap",
+  ],
+  "Machinery & Equipment": [
+    "CNC machines", "Hydraulic press machines", "Lathe machines", "Milling machines",
+    "Press brakes", "Injection moulding machines", "Cutting machines",
+    "Mixing equipment", "Dryers", "Conveyors", "Compressors", "Air handling units",
+    "Carbide cutting tools", "Press dies", "Jigs and fixtures", "Industrial drill bits",
+    "Excavators", "Forklifts", "Cranes", "Generators", "Diesel engines",
+    "PLCs", "Servo motors", "Conveyor systems", "Robotic arms", "VFDs",
+  ],
+  "Construction Materials": [
+    "Black Galaxy granite slabs", "Absolute Black granite", "Kashmir White granite",
+    "Granite tiles", "Granite kerbs",
+    "Makrana white marble", "Marble tiles", "Marble flooring slabs",
+    "Sandstone cladding", "Slate tiles", "Limestone blocks", "Cobblestones",
+    "Vitrified floor tiles", "Porcelain tiles", "Wall tiles", "Mosaic tiles",
+    "Cement bags", "TMT steel bars", "AAC blocks", "PVC pipes", "Plywood sheets",
+  ],
+  "Industrial Raw Materials": [
+    "HDPE granules", "PP granules", "PVC resin", "Polystyrene",
+    "Caustic soda", "Soda ash", "Sulphuric acid", "Industrial salts",
+    "Iron ore fines", "Limestone powder", "Silica sand", "Bentonite",
+    "Gypsum", "Coal (non-coking)", "Furnace coke", "Minerals",
+    "Carbon black", "Titanium dioxide",
+  ],
+  "Engineering Components": [
+    "Mild steel fasteners", "Stainless steel bolts and nuts", "Hex bolts",
+    "Anchor bolts", "Threaded rods",
+    "Mechanical seals", "Bearings", "Gears", "Shafts", "Couplings",
+    "Steel fabricated frames", "Pressure vessels", "Industrial valves",
+    "Pipes and fittings", "Flanges",
+    "Industrial hardware", "Springs", "Bushings",
+  ],
+  "Packaging & Supplies": [
+    "BOPP bags", "Woven PP bags", "Jute bags",
+    "Carton boxes", "Corrugated packaging", "Kraft paper rolls",
+    "Plastic film rolls", "Stretch wrap", "Shrink wrap",
+    "Industrial packing materials", "Bulk bags (FIBC)", "Pallet wrap",
+    "Packaging tapes", "Foam padding", "Bubble wrap rolls",
+  ],
+  "Custom Sourcing": [
+    "Buyer-led procurement requirement",
+    "Non-standard product request",
+    "Supplier identification and verification",
+    "Domestic and export supply support",
+    "Commercial supply requirement",
+    "Procurement coordination",
+  ],
+};
 
 const MIDDLE_EAST_ISO = ["AE", "SA", "QA", "OM", "KW", "BH", "JO", "IQ", "YE", "SY", "LB", "PS"];
 
@@ -106,26 +175,11 @@ const ZIP_DESTINATIONS = [
 ];
 
 const COMPANY_SUGGESTIONS = [
-  "Emirates Global Aluminium",
-  "Emirates Steel",
-  "Emirates National Oil Company",
-  "Saudi Aramco",
-  "SABIC",
-  "Qatar Petroleum",
-  "Kuwait Petroleum Corporation",
-  "Bapco (Bahrain Petroleum)",
-  "Oman Oil Company",
-  "Abu Dhabi National Energy Company",
-  "Dubai Aluminium (DUBAL)",
-  "Maaden (Saudi Arabian Mining)",
-  "Taqa (Abu Dhabi National Energy)",
-  "Aldar Properties",
-  "ADNOC Distribution",
-  "Gulf International Bank",
-  "Air Arabia",
-  "Emirates Group",
-  "DP World",
-  "Agility Logistics",
+  "Manufacturing Company",
+  "Trading Company",
+  "Procurement Company",
+  "Construction Company",
+  "Industrial Supplier",
 ];
 
 // ── Types ──────────────────────────────────────────────────────────────────────
@@ -143,6 +197,7 @@ interface FormData {
   destinationCountryCode: string;
   destinationState: string;
   destinationZip: string;
+  destinationManual: boolean;
   // Step 3
   incoterm: string;
   shipmentType: string;
@@ -163,6 +218,7 @@ interface FormData {
   phone: PhoneValue | undefined;
   whatsapp: PhoneValue | undefined;
   whatsappConsent: boolean;
+  privacyConsent: boolean;
   message: string;
 }
 
@@ -177,6 +233,7 @@ const INITIAL: FormData = {
   destinationCountryCode: "",
   destinationState: "",
   destinationZip: "",
+  destinationManual: false,
   incoterm: "",
   shipmentType: "",
   timeline: "",
@@ -194,6 +251,7 @@ const INITIAL: FormData = {
   phone: undefined,
   whatsapp: undefined,
   whatsappConsent: false,
+  privacyConsent: false,
   message: "",
 };
 
@@ -215,11 +273,10 @@ function AutocompleteInput({
   label?: string;
 }) {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState(value);
   const ref = useRef<HTMLDivElement>(null);
 
-  const filtered = query.length > 0
-    ? suggestions.filter((s) => s.toLowerCase().includes(query.toLowerCase())).slice(0, 8)
+  const filtered = value.length > 0
+    ? suggestions.filter((s) => s.toLowerCase().includes(value.toLowerCase())).slice(0, 8)
     : suggestions.slice(0, 8);
 
   useEffect(() => {
@@ -235,9 +292,9 @@ function AutocompleteInput({
       {label && <label style={labelStyle}>{label}</label>}
       <input
         style={inputStyle}
-        value={query}
+        value={value}
         placeholder={placeholder}
-        onChange={(e) => { setQuery(e.target.value); onChange(e.target.value); setOpen(true); }}
+        onChange={(e) => { onChange(e.target.value); setOpen(true); }}
         onFocus={() => setOpen(true)}
         autoComplete="off"
       />
@@ -254,7 +311,7 @@ function AutocompleteInput({
               <li
                 key={s}
                 style={dropdownItemStyle}
-                onMouseDown={() => { onChange(s); setQuery(s); setOpen(false); }}
+                onMouseDown={() => { onChange(s); setOpen(false); }}
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--color-bg-secondary)"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
               >
@@ -285,9 +342,10 @@ function SearchableSelect({
   const [query, setQuery] = useState("");
   const ref = useRef<HTMLDivElement>(null);
 
-  const filtered = options.filter((o) =>
+  const allFiltered = options.filter((o) =>
     o.label.toLowerCase().includes(query.toLowerCase())
-  ).slice(0, 50);
+  );
+  const filtered = allFiltered.slice(0, 50);
 
   const selected = options.find((o) => o.value === value);
 
@@ -344,6 +402,11 @@ function SearchableSelect({
               ))}
               {filtered.length === 0 && (
                 <li style={{ ...dropdownItemStyle, color: "var(--color-text-tertiary)", fontSize: "13px" }}>No results</li>
+              )}
+              {allFiltered.length > 50 && (
+                <li style={{ ...dropdownItemStyle, color: "var(--color-text-tertiary)", fontSize: "12px", cursor: "default" }}>
+                  Keep typing to narrow results ({allFiltered.length} matches)
+                </li>
               )}
             </ul>
           </motion.div>
@@ -413,6 +476,8 @@ function buildCountryOptions() {
   ];
 }
 
+const COUNTRY_OPTIONS = buildCountryOptions();
+
 function buildStateOptions(isoCode: string) {
   const states = State.getStatesOfCountry(isoCode);
   return states.map((s) => ({ label: s.name, value: s.name, code: s.isoCode }));
@@ -431,7 +496,7 @@ function inferDestination(destinationPort: string, zip: string) {
   const zipMatch = zipDigits
     ? ZIP_DESTINATIONS.find((item) => item.match.test(zipDigits))
     : undefined;
-  const match = zipMatch || portMatch;
+  const match = portMatch || zipMatch;
   if (!match) return null;
 
   const country = countryNameFromCode(match.countryCode);
@@ -454,6 +519,12 @@ function Step1({
   data: FormData;
   set: (k: keyof FormData, v: string) => void;
 }) {
+  // Pick suggestions based on selected category; fall back to generic list
+  const requirementSuggestions =
+    data.productCategory && CATEGORY_PRODUCT_SUGGESTIONS[data.productCategory]
+      ? CATEGORY_PRODUCT_SUGGESTIONS[data.productCategory]
+      : PRODUCT_SUGGESTIONS;
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       <div>
@@ -474,13 +545,13 @@ function Step1({
       <AutocompleteInput
         value={data.requirement}
         onChange={(v) => set("requirement", v)}
-        suggestions={PRODUCT_SUGGESTIONS}
-        placeholder="e.g. Steel Scrap, Industrial Equipment, HDPE Granules"
-        label="Product / Requirement"
+        suggestions={requirementSuggestions}
+        placeholder={data.productCategory ? `e.g. ${requirementSuggestions[0] ?? "Specify your product"}` : "e.g. Steel Scrap, Industrial Equipment, HDPE Granules"}
+        label="Product / Requirement *"
       />
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "12px" }}>
         <div>
-          <label style={labelStyle}>Quantity</label>
+          <label style={labelStyle}>Quantity *</label>
           <input
             style={inputStyle}
             placeholder="e.g. 25 MT, 2 x 40ft FCL"
@@ -523,21 +594,21 @@ function Step1({
 function Step2({
   data,
   set,
+  setBool,
 }: {
   data: FormData;
   set: (k: keyof FormData, v: string) => void;
+  setBool: (k: keyof FormData, v: boolean) => void;
 }) {
-  const countryOptions = buildCountryOptions();
-  const stateOptions = data.destinationCountryCode
-    ? buildStateOptions(data.destinationCountryCode)
-    : [];
+  const countryOptions = COUNTRY_OPTIONS;
+  const stateOptions = useMemo(() => data.destinationCountryCode ? buildStateOptions(data.destinationCountryCode) : [], [data.destinationCountryCode]);
   const hasStates = stateOptions.length > 0;
-  const autoFilled = Boolean(inferDestination(data.destinationPort, data.destinationZip));
+  const autoFilled = Boolean(inferDestination(data.destinationPort, data.destinationZip)) && !data.destinationManual;
 
   function applyDestination(value: string, zip = data.destinationZip) {
     set("destinationPort", value);
     const inferred = inferDestination(value, zip);
-    if (!inferred) return;
+    if (!inferred || data.destinationManual) return;
     set("destinationCountry", inferred.country);
     set("destinationCountryCode", inferred.countryCode);
     set("destinationState", inferred.state);
@@ -546,7 +617,7 @@ function Step2({
   function applyZip(zip: string) {
     set("destinationZip", zip);
     const inferred = inferDestination(data.destinationPort, zip);
-    if (!inferred) return;
+    if (!inferred || data.destinationManual) return;
     set("destinationCountry", inferred.country);
     set("destinationCountryCode", inferred.countryCode);
     set("destinationState", inferred.state);
@@ -559,7 +630,7 @@ function Step2({
           Where are you shipping to?
         </h2>
         <p style={{ fontSize: "14px", color: "var(--color-text-secondary)", margin: 0 }}>
-          Enter the destination port and ZIP / PIN. Country and state are filled automatically when detected.
+          Enter the destination port and ZIP / PIN. Country and state can be auto-filled; your manual selection is preserved.
         </p>
       </div>
       <AutocompleteInput
@@ -567,7 +638,7 @@ function Step2({
         onChange={applyDestination}
         suggestions={ALL_PORTS}
         placeholder="e.g. Jebel Ali Port, UAE"
-        label="Destination Port"
+        label="Destination Port *"
       />
       <div>
         <label style={labelStyle}>ZIP / PIN Code</label>
@@ -580,7 +651,7 @@ function Step2({
       </div>
       {autoFilled && (
         <p style={{ margin: "-4px 0 0", color: "var(--color-accent)", fontSize: "13px", fontWeight: 650 }}>
-          Destination details auto-filled. You can still edit them if needed.
+          Destination details auto-filled from the port (or ZIP when no port matches). Selecting a country or state keeps your choice.
         </p>
       )}
       <SearchableSelect
@@ -592,6 +663,7 @@ function Step2({
           set("destinationCountry", v);
           set("destinationCountryCode", code || "");
           set("destinationState", "");
+          setBool("destinationManual", true);
         }}
       />
       {hasStates ? (
@@ -600,7 +672,7 @@ function Step2({
           value={data.destinationState}
           placeholder="Auto-filled from port / ZIP where possible"
           options={stateOptions}
-          onChange={(v) => set("destinationState", v)}
+          onChange={(v) => { set("destinationState", v); setBool("destinationManual", true); }}
         />
       ) : data.destinationCountry ? (
         <div>
@@ -609,7 +681,7 @@ function Step2({
             style={inputStyle}
             placeholder="State / Province"
             value={data.destinationState}
-            onChange={(e) => set("destinationState", e.target.value)}
+            onChange={(e) => { set("destinationState", e.target.value); setBool("destinationManual", true); }}
           />
         </div>
       ) : null}
@@ -765,9 +837,7 @@ function Step5({
   setPhone: (v: PhoneValue | undefined) => void;
   setWhatsapp: (v: PhoneValue | undefined) => void;
 }) {
-  const defaultCountry = MIDDLE_EAST_ISO.includes(data.destinationCountryCode)
-    ? (data.destinationCountryCode as "AE" | "SA" | "QA" | "OM" | "KW" | "BH" | "JO" | "IQ")
-    : "AE";
+  const defaultCountry = (data.destinationCountryCode || "IN") as import("react-phone-number-input").Country;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -784,10 +854,10 @@ function Step5({
         onChange={(v) => set("companyName", v)}
         suggestions={COMPANY_SUGGESTIONS}
         placeholder="e.g. Emirates Steel…"
-        label="Company Name"
+        label="Company Name *"
       />
       <div>
-        <label style={labelStyle}>Contact Person</label>
+        <label style={labelStyle}>Contact Person *</label>
         <input
           style={inputStyle}
           placeholder="Your full name"
@@ -797,7 +867,7 @@ function Step5({
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "12px" }}>
         <div>
-          <label style={labelStyle}>Phone Number</label>
+          <label style={labelStyle}>Phone Number *</label>
           <div style={phoneWrapStyle}>
             <PhoneInput
               international
@@ -808,6 +878,9 @@ function Step5({
               countrySelectProps={{ unicodeFlags: true }}
             />
           </div>
+          {data.phone && !isPossiblePhoneNumber(data.phone) && (
+            <p role="alert" style={{ color: "#b42318", fontSize: "12px", margin: "6px 0 0" }}>Enter a complete phone number.</p>
+          )}
         </div>
         <div>
           <label style={labelStyle}>WhatsApp Number</label>
@@ -841,6 +914,9 @@ function Step5({
           value={data.email}
           onChange={(e) => set("email", e.target.value)}
         />
+        {data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email) && (
+          <p role="alert" style={{ color: "#b42318", fontSize: "12px", margin: "6px 0 0" }}>Enter a valid email address or leave this field blank.</p>
+        )}
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "12px" }}>
         <div>
@@ -869,7 +945,11 @@ function Step5({
           onChange={(e) => setBool("whatsappConsent", e.target.checked)}
           style={{ marginTop: "3px", width: "16px", height: "16px" }}
         />
-        Send the RFQ summary PDF and status updates on WhatsApp if automatic delivery is available. If not, show me a manual WhatsApp share button.
+        Send the RFQ summary PDF and status updates on WhatsApp. If automatic delivery isn&apos;t available, I&apos;ll share the PDF manually.
+      </label>
+      <label style={{ display: "flex", gap: "10px", alignItems: "flex-start", color: "var(--color-text-secondary)", fontSize: "13px", lineHeight: 1.55, cursor: "pointer" }}>
+        <input type="checkbox" checked={data.privacyConsent} onChange={(e) => setBool("privacyConsent", e.target.checked)} style={{ marginTop: "3px", width: "16px", height: "16px" }} />
+        <span>I agree to the processing and sharing of my RFQ details as described in the <a href="/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</a>, including email delivery and, where selected, WhatsApp delivery.</span>
       </label>
     </div>
   );
@@ -910,7 +990,7 @@ function Step6({ data }: { data: FormData }) {
         <ReviewRow label="WhatsApp" value={[data.whatsapp?.toString(), data.whatsappConsent ? "Consent given" : "Manual/email only"].filter(Boolean).join(" | ")} />
       </div>
       <p style={{ margin: 0, color: "var(--color-text-secondary)", fontSize: "13px", lineHeight: 1.6 }}>
-        After submission, the PDF downloads automatically. If WhatsApp Cloud API is configured, the RFQ PDF and status update are sent automatically; otherwise a manual WhatsApp share button is shown.
+        After submission, the RFQ summary PDF downloads automatically. Where WhatsApp delivery is available, we send it there too; otherwise a manual share link is provided.
       </p>
     </div>
   );
@@ -927,12 +1007,35 @@ const phoneWrapStyle: React.CSSProperties = {
 // ── Main RFQWizard component ───────────────────────────────────────────────────
 
 export default function RFQWizard({ onClose }: { onClose: () => void }) {
-  const [step, setStep] = useState(0);
-  const [data, setData] = useState<FormData>(INITIAL);
+  const [draft] = useState(() => {
+    if (typeof window === "undefined") return { data: INITIAL, step: 0 };
+    const saved = sessionStorage.getItem("safar-rfq-draft");
+    if (!saved) return { data: INITIAL, step: 0 };
+    try {
+      const parsed = JSON.parse(saved) as { data?: FormData; step?: number };
+      return {
+        data: parsed.data ? { ...INITIAL, ...parsed.data } : INITIAL,
+        step: typeof parsed.step === "number" ? Math.max(0, Math.min(STEPS.length - 1, parsed.step)) : 0,
+      };
+    } catch {
+      sessionStorage.removeItem("safar-rfq-draft");
+      return { data: INITIAL, step: 0 };
+    }
+  });
+  const [step, setStep] = useState(draft.step);
+  const [data, setData] = useState<FormData>(draft.data);
+  const formStartedAt = useRef(0);
+  const [website, setWebsite] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitResult, setSubmitResult] = useState<RfqSubmitResponse | null>(null);
   const [error, setError] = useState("");
+
+  useEffect(() => { formStartedAt.current = Date.now(); }, []);
+
+  useEffect(() => {
+    if (!submitted) sessionStorage.setItem("safar-rfq-draft", JSON.stringify({ data, step }));
+  }, [data, step, submitted]);
 
   function set(k: keyof FormData, v: string) {
     setData((prev) => ({ ...prev, [k]: v }));
@@ -960,19 +1063,23 @@ export default function RFQWizard({ onClose }: { onClose: () => void }) {
     return () => window.clearTimeout(cleanup);
   }, [submitted, submitResult]);
 
-  useEffect(() => {
-    if (!submitted || !submitResult?.whatsappManualUrl) return;
-    const timer = window.setTimeout(() => {
-      window.open(submitResult.whatsappManualUrl, "_blank", "noopener,noreferrer");
-    }, 450);
-    return () => window.clearTimeout(timer);
-  }, [submitted, submitResult]);
-
   function canNext() {
     if (step === 0) return data.requirement.trim().length > 0 && data.quantity.trim().length > 0;
     if (step === 1) return data.destinationPort.trim().length > 0 && data.destinationCountry.trim().length > 0;
-    if (step === 4) return data.companyName.trim().length > 0 && data.contactPerson.trim().length > 0 && !!data.phone;
+    if (step === 4) return data.companyName.trim().length > 0 && data.contactPerson.trim().length > 0 && !!data.phone && data.privacyConsent && isPossiblePhoneNumber(data.phone) && (!data.email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email));
     return true;
+  }
+
+  function nextRequirementMessage() {
+    if (step === 0 && !data.requirement.trim()) return "Enter the product or requirement to continue.";
+    if (step === 0 && !data.quantity.trim()) return "Enter the quantity to continue.";
+    if (step === 1 && !data.destinationPort.trim()) return "Enter the destination port to continue.";
+    if (step === 1 && !data.destinationCountry.trim()) return "Select the destination country to continue.";
+    if (step === 4 && !data.companyName.trim()) return "Enter your company name to continue.";
+    if (step === 4 && !data.contactPerson.trim()) return "Enter a contact person to continue.";
+    if (step === 4 && (!data.phone || !isPossiblePhoneNumber(data.phone))) return "Enter a complete, valid phone number to continue.";
+    if (step === 4 && data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) return "Correct the email address or leave it blank to continue.";
+    return "";
   }
 
   async function handleSubmit() {
@@ -987,12 +1094,15 @@ export default function RFQWizard({ onClose }: { onClose: () => void }) {
           email: data.email,
           phone: data.phone?.toString() || "",
           whatsapp: data.whatsapp?.toString() || "",
+          website,
+          formStartedAt: formStartedAt.current,
         }),
       });
       const result = (await res.json()) as RfqSubmitResponse;
       if (!res.ok || !result.ok) throw new Error(result.error || "Server error");
       setSubmitResult(result);
       setSubmitted(true);
+      sessionStorage.removeItem("safar-rfq-draft");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again or contact us directly.");
     } finally {
@@ -1022,6 +1132,7 @@ export default function RFQWizard({ onClose }: { onClose: () => void }) {
         minHeight: 0,
       }}
     >
+      <input aria-hidden="true" tabIndex={-1} autoComplete="off" value={website} onChange={(event) => setWebsite(event.target.value)} style={{ position: "absolute", width: 1, height: 1, overflow: "hidden" }} />
       {/* Header */}
       <div className="rfq-wizard-header" style={{
         padding: "20px clamp(18px, 4vw, 56px) 16px",
@@ -1104,7 +1215,10 @@ export default function RFQWizard({ onClose }: { onClose: () => void }) {
           </div>
         <button
           type="button"
-          onClick={onClose}
+          onClick={() => {
+            if (!submitted && step > 0 && !window.confirm("Discard your RFQ draft?")) return;
+            onClose();
+          }}
           aria-label="Close RFQ"
           style={{ background: "var(--color-bg-secondary)", border: "1px solid var(--color-border-light)", borderRadius: "999px", cursor: "pointer", color: "var(--color-text-secondary)", padding: "8px", width: "42px", height: "42px", display: "inline-flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
         >
@@ -1141,11 +1255,12 @@ export default function RFQWizard({ onClose }: { onClose: () => void }) {
               <ReviewRow label="RFQ submitted" value="Complete" />
               <ReviewRow label="PDF generated" value={submitResult?.pdfFileName || "Complete"} />
               <ReviewRow label="PDF download" value="Started automatically" />
-              <ReviewRow label="Email" value={submitResult?.emailSent ? "Sent to Safar Traders" : "Not configured / skipped"} />
+              <ReviewRow label="Email" value={submitResult?.emailSent ? "Sent to Safar Traders" : (submitResult?.emailNote || "Not available — use WhatsApp instead")} />
               <ReviewRow
                 label="WhatsApp"
                 value={submitResult?.whatsappBuyerSent || submitResult?.whatsappTeamSent ? "PDF/status sent automatically where configured" : "Manual WhatsApp share available"}
               />
+              <ReviewRow label="WhatsApp note" value={submitResult?.whatsappNote} />
             </div>
             <div className="rfq-success-actions" style={{ display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center", marginTop: "4px" }}>
               {submitResult?.pdfBase64 && (
@@ -1188,7 +1303,7 @@ export default function RFQWizard({ onClose }: { onClose: () => void }) {
               transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
             >
               {step === 0 && <Step1 data={data} set={set} />}
-              {step === 1 && <Step2 data={data} set={set} />}
+              {step === 1 && <Step2 data={data} set={set} setBool={setBool} />}
               {step === 2 && <Step3 data={data} set={set} />}
               {step === 3 && <Step4 data={data} set={set} />}
               {step === 4 && <Step5 data={data} set={set} setBool={setBool} setPhone={setPhone} setWhatsapp={setWhatsapp} />}
@@ -1197,7 +1312,7 @@ export default function RFQWizard({ onClose }: { onClose: () => void }) {
           </AnimatePresence>
         )}
         {error && (
-          <p style={{ color: "#b42318", fontSize: "13px", marginTop: "12px" }}>{error}</p>
+          <p role="alert" style={{ color: "#b42318", fontSize: "13px", marginTop: "12px" }}>{error}</p>
         )}
         </div>
       </div>
@@ -1208,6 +1323,7 @@ export default function RFQWizard({ onClose }: { onClose: () => void }) {
           padding: "16px clamp(18px, 4vw, 56px)",
           borderTop: "1px solid var(--color-border-light)",
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           gap: "12px",
@@ -1263,6 +1379,7 @@ export default function RFQWizard({ onClose }: { onClose: () => void }) {
             </button>
           )}
           </div>
+          {!canNext() && <p role="status" style={{ width: "100%", maxWidth: "720px", margin: "0", color: "var(--color-text-secondary)", fontSize: "12px", textAlign: "right" }}>{nextRequirementMessage()}</p>}
         </div>
       )}
     </motion.div>

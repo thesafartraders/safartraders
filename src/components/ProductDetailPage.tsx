@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, MessageCircle, FileText, PackageCheck, ChevronRight } from "lucide-react";
 import { catalogImages, type ProductCategory, productCategories } from "@/lib/products";
 import { siteConfig } from "@/lib/site-config";
+import { waLink } from "@/lib/whatsapp";
 
 interface Props { category: ProductCategory; }
 
@@ -41,18 +42,42 @@ ${fields.notes || "—"}
 Please review and share sourcing feasibility / quotation details.`;
 }
 
+function buildEmailMessage(fields: Record<string, string>, categoryTitle: string) {
+  return `Hello Safar Traders,
+
+I would like to request a quotation.
+
+Category: ${categoryTitle}
+Subcategory: ${fields.subcategory || "—"}
+Product / Requirement: ${fields.product || "—"}
+Grade / Specification: ${fields.grade || "—"}
+Quantity: ${fields.quantity || "—"}
+Destination: ${fields.destination || "—"}
+Timeline: ${fields.timeline || "—"}
+
+Contact Person: ${fields.name || "—"}
+Company: ${fields.company || "—"}
+Country: ${fields.country || "—"}
+Email: ${fields.email || "—"}
+Phone / WhatsApp: ${fields.phone || "—"}
+
+Notes:
+${fields.notes || "—"}
+
+Please review and share sourcing feasibility / quotation details.`;
+}
+
 export default function ProductDetailPage({ category }: Props) {
   const formRef = useRef<HTMLDivElement>(null);
   const categoryUrl = `${siteConfig.url}/products/${category.slug}`;
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": `${categoryUrl}#service`,
     name: `${category.title} sourcing and export support`,
     description: category.metaDescription,
     provider: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      url: siteConfig.url,
+      "@id": `${siteConfig.url}/#organization`,
     },
     areaServed: "Worldwide",
     serviceType: category.title,
@@ -86,8 +111,11 @@ export default function ProductDetailPage({ category }: Props) {
     destination: "", timeline: "", notes: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const formStartedAt = useRef(0);
+  useEffect(() => { formStartedAt.current = Date.now(); }, []);
+  const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [website, setWebsite] = useState("");
 
   const otherCategories = productCategories.filter((c) => c.slug !== category.slug).slice(0, 3);
 
@@ -112,6 +140,7 @@ export default function ProductDetailPage({ category }: Props) {
     if (!form.product.trim()) e.product = "Required";
     if (!form.quantity.trim()) e.quantity = "Required";
     if (!form.destination.trim()) e.destination = "Required";
+    if (!privacyConsent) e.privacyConsent = "Privacy-policy consent is required";
     return e;
   }
 
@@ -120,50 +149,19 @@ export default function ProductDetailPage({ category }: Props) {
     setErrors(e);
     if (Object.keys(e).length) return;
     const msg = buildWhatsAppMessage(form, category.shortTitle);
-    window.open(`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`, "_blank");
+    window.open(waLink(siteConfig.whatsappRaw, msg), "_blank", "noopener,noreferrer");
   }
 
-  async function handleSubmit(ev: React.FormEvent) {
+  function handleSubmit(ev: React.FormEvent) {
     ev.preventDefault();
     const e = validate();
     setErrors(e);
     if (Object.keys(e).length) return;
     setSubmitting(true);
-    try {
-      const response = await fetch("/api/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          source: "contact-form",
-          name: form.name,
-          company: form.company,
-          email: form.email,
-          phone: form.phone,
-          country: form.country,
-          product: form.product,
-          quantity: form.quantity,
-          destinationPort: form.destination,
-          timeline: form.timeline,
-          message: [
-            `Category: ${category.shortTitle}`,
-            `Subcategory: ${form.subcategory || "-"}`,
-            `Grade / Specification: ${form.grade || "-"}`,
-            "",
-            form.notes,
-          ].join("\n"),
-        }),
-      });
-      if (!response.ok) throw new Error("RFQ submission failed");
-    } catch {
-      setErrors((current) => ({
-        ...current,
-        submit: "We could not submit the RFQ by email. Please use the WhatsApp button.",
-      }));
-      setSubmitting(false);
-      return;
-    }
+    const subject = `RFQ — ${category.shortTitle}: ${form.product}`;
+    const body = buildEmailMessage(form, category.shortTitle);
+    window.location.href = `mailto:${siteConfig.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSubmitting(false);
-    setSubmitted(true);
   }
 
   return (
@@ -187,7 +185,7 @@ export default function ProductDetailPage({ category }: Props) {
                 Request a Quote <ArrowRight size={15} aria-hidden="true" />
               </button>
               <a
-                href={`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(`Hello Safar Traders, I would like to discuss a sourcing requirement for ${category.shortTitle}.`)}`}
+                href={waLink(siteConfig.whatsappRaw, `Hello Safar Traders, I would like to discuss a sourcing requirement for ${category.shortTitle}.`)}
                 target="_blank" rel="noopener noreferrer"
                 className="btn btn-secondary"
               >
@@ -246,7 +244,7 @@ export default function ProductDetailPage({ category }: Props) {
                     onClick={() => prefillAndScroll(sub.name)}
                     className="btn btn-secondary small-btn subcat-cta"
                   >
-                    Request quote for this <ArrowRight size={13} aria-hidden="true" />
+                    Request a Quote <ArrowRight size={13} aria-hidden="true" />
                   </button>
                 </div>
               </article>
@@ -289,11 +287,11 @@ export default function ProductDetailPage({ category }: Props) {
         <div className="container-site">
           <div className="rfq-layout">
             <div className="rfq-intro">
-              <span className="eyebrow">Request a Quotation</span>
+              <span className="eyebrow">Request a Quote</span>
               <h2 className="section-title small">Submit your sourcing requirement.</h2>
               <p className="section-copy">
                 Fill in your requirement details below. We review every RFQ against sourcing feasibility
-                before responding — typically within one business day.
+                before responding. We aim to respond within one business day.
               </p>
               <div className="rfq-wa-note">
                 <MessageCircle size={16} aria-hidden="true" />
@@ -302,20 +300,7 @@ export default function ProductDetailPage({ category }: Props) {
             </div>
 
             <div className="rfq-form-card">
-              {submitted ? (
-                <div className="rfq-success">
-                  <h3>Requirement received.</h3>
-                  <p>We will review your requirement and respond within one business day. For urgent requirements, use the WhatsApp button.</p>
-                  <a
-                    href={`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(`Hello Safar Traders, I just submitted an RFQ for ${category.shortTitle}. Please confirm receipt.`)}`}
-                    target="_blank" rel="noopener noreferrer"
-                    className="btn btn-secondary"
-                  >
-                    <MessageCircle size={15} aria-hidden="true" /> Follow up on WhatsApp
-                  </a>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} noValidate className="rfq-form" aria-label="RFQ form">
+              <form onSubmit={handleSubmit} noValidate className="rfq-form" aria-label="RFQ form">
                   <div className="rfq-row-2">
                     <div className="rfq-field">
                       <label className="form-label" htmlFor="rfq-name">Contact person <span aria-hidden="true">*</span></label>
@@ -370,6 +355,9 @@ export default function ProductDetailPage({ category }: Props) {
                     <input id="rfq-product" className={`form-input${errors.product ? " input-error" : ""}`} value={form.product} onChange={(e) => set("product", e.target.value)} placeholder="e.g. HR steel coil, HDPE granules, hydraulic press machine" />
                     {errors.product && <span className="field-error">{errors.product}</span>}
                   </div>
+                  <div className="hidden-field" aria-hidden="true"><input tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} /></div>
+                  <label style={{ display: "flex", gap: "0.45rem", alignItems: "flex-start" }}><input type="checkbox" checked={privacyConsent} onChange={(e) => setPrivacyConsent(e.target.checked)} /><span>I agree to the processing of my details under the <Link href={siteConfig.legal.privacyPolicyUrl}>Privacy Policy</Link>.</span></label>
+                  {errors.privacyConsent && <span className="field-error">{errors.privacyConsent}</span>}
 
                   <div className="rfq-row-2">
                     <div className="rfq-field">
@@ -402,15 +390,14 @@ export default function ProductDetailPage({ category }: Props) {
 
                   <div className="rfq-actions">
                     <button type="submit" className="btn btn-primary" disabled={submitting}>
-                      {submitting ? "Submitting…" : "Submit RFQ"}
+                      {submitting ? "Opening email…" : "Submit RFQ"}
                     </button>
                     <button type="button" onClick={openWhatsApp} className="btn btn-secondary">
                       <MessageCircle size={15} aria-hidden="true" /> Send RFQ on WhatsApp
                     </button>
                   </div>
                   {errors.submit && <p className="field-error form-submit-error">{errors.submit}</p>}
-                </form>
-              )}
+              </form>
             </div>
           </div>
         </div>

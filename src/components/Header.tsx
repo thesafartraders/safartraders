@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { siteConfig } from "@/lib/site-config";
-import logo from "@/images/safartraders.png";
+import logo from "@/images/safartraders.webp";
 import RFQWizardLauncher from "./RFQWizardLauncher";
 
 export default function Header() {
@@ -41,12 +41,11 @@ export default function Header() {
 
         <nav className="desktop-nav" aria-label="Primary navigation">
           {siteConfig.nav.map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
-          <Link href="/company-profile" className="desktop-nav-only">Company Profile</Link>
         </nav>
 
         <div className="header-actions">
           <a href={`tel:${siteConfig.phoneRaw}`} className="phone-link">{siteConfig.phone}</a>
-          <RFQWizardLauncher label="Request Quote" className="btn btn-primary small-btn" />
+          <RFQWizardLauncher label="Request a Quote" className="btn btn-primary small-btn" />
         </div>
 
         <button className="mobile-menu-button" onClick={() => setMenuOpen((value) => !value)} aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-nav-panel">
@@ -85,7 +84,7 @@ export default function Header() {
               </nav>
               {/* Request Quote already lives in the header (tablet+) — only repeat it here
                   on true mobile widths where the header button is hidden (see CSS .mobile-quote). */}
-              <RFQWizardLauncher label="Request Quote" className="btn btn-primary mobile-quote" />
+              <RFQWizardLauncher label="Request a Quote" className="btn btn-primary mobile-quote" />
               <a
                 href={`tel:${siteConfig.phoneRaw}`}
                 className="mobile-nav-phone"

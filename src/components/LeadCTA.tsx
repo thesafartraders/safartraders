@@ -1,19 +1,25 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Mail, MessageCircle, Phone } from "lucide-react";
 import { productCategories } from "@/lib/products";
 import { siteConfig } from "@/lib/site-config";
+import Link from "next/link";
+import { waLink } from "@/lib/whatsapp";
 
 export default function LeadCTA() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [whatsappFallback, setWhatsappFallback] = useState(false);
+  const formStartedAt = useRef(0);
+  useEffect(() => { formStartedAt.current = Date.now(); }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
+    setWhatsappFallback(false);
     const form = e.currentTarget;
     const data = new FormData(form);
 
@@ -33,12 +39,18 @@ export default function LeadCTA() {
           destinationPort: data.get("destinationPort"),
           message: data.get("message"),
           website: data.get("website"),
+          privacyConsent: data.get("privacyConsent") === "on",
+          formStartedAt: formStartedAt.current,
         }),
       });
       const json = await res.json();
-      if (!res.ok || !json.ok) throw new Error(json.error || "Submission failed");
+      if (!res.ok || !json.ok) {
+        setWhatsappFallback(Boolean(json.whatsappFallback));
+        throw new Error(json.error || "Submission failed");
+      }
       setSubmitted(true);
       form.reset();
+      formStartedAt.current = Date.now();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please use WhatsApp or email us directly.");
     } finally {
@@ -50,8 +62,8 @@ export default function LeadCTA() {
     <section className="section-pad bg-white section-border" id="request-quote">
       <div className="container-site">
         <div className="lead-heading">
-          <span className="eyebrow lead-eyebrow">Request a Quotation</span>
-          <h2 className="section-title lead-title">Send the details a sourcing team actually needs.</h2>
+          <span className="eyebrow lead-eyebrow">Request a Quote</span>
+          <h2 className="section-title lead-title">Send the details a sourcing team needs.</h2>
           <p className="section-copy lead-copy">
             A useful RFQ includes the product, specification or grade, quantity, destination port, and timeline. We review feasibility before discussing commercial terms.
           </p>
@@ -68,7 +80,7 @@ export default function LeadCTA() {
             <a href={`tel:${siteConfig.phoneRaw}`}><Phone size={15} aria-hidden="true" />{siteConfig.phone}</a>
             <a href={`tel:${siteConfig.phoneSecondaryRaw}`}><Phone size={15} aria-hidden="true" />{siteConfig.phoneSecondary}</a>
             <a href={`mailto:${siteConfig.email}`}><Mail size={15} aria-hidden="true" />{siteConfig.email}</a>
-            <a href={`https://wa.me/${siteConfig.whatsapp}`} target="_blank" rel="noopener noreferrer"><MessageCircle size={15} aria-hidden="true" />WhatsApp requirement</a>
+            <a href={waLink(siteConfig.whatsappRaw, "Hello Safar Traders, I'd like to discuss a sourcing/export requirement.")} target="_blank" rel="noopener noreferrer"><MessageCircle size={15} aria-hidden="true" />WhatsApp requirement</a>
           </div>
         </div>
 
@@ -99,11 +111,11 @@ export default function LeadCTA() {
 
               <div className="form-row-2">
                 <div>
-                  <label className="form-label" htmlFor="email">Email *</label>
-                  <input className="form-input" id="email" type="email" name="email" autoComplete="email" required />
+                  <label className="form-label form-label-optional" htmlFor="email">Email <span className="optional-tag">(email or phone required)</span></label>
+                  <input className="form-input" id="email" type="email" name="email" autoComplete="email" />
                 </div>
                 <div>
-                  <label className="form-label" htmlFor="phone">Phone / WhatsApp</label>
+                  <label className="form-label form-label-optional" htmlFor="phone">Phone / WhatsApp <span className="optional-tag">(email or phone required)</span></label>
                   <input className="form-input" id="phone" type="tel" name="phone" autoComplete="tel" />
                 </div>
               </div>
@@ -113,7 +125,7 @@ export default function LeadCTA() {
                   <label className="form-label" htmlFor="category">Category *</label>
                   <select className="form-input" id="category" name="category" required defaultValue="">
                     <option value="" disabled>Select category</option>
-                    {productCategories.map((category) => <option key={category.slug} value={category.title}>{category.shortTitle}</option>)}
+                    {productCategories.map((category) => <option key={category.slug} value={category.shortTitle}>{category.shortTitle}</option>)}
                     <option value="Other industrial requirement">Other industrial requirement</option>
                   </select>
                 </div>
@@ -139,7 +151,11 @@ export default function LeadCTA() {
                 <textarea className="form-input rfq-textarea-compact" id="message" name="message" rows={2} placeholder="Grade, standard, packing, inspection, Incoterm, or timeline." />
               </div>
 
-              {error && <p className="form-error" role="alert">{error}</p>}
+              {error && <div className="form-error" role="alert"><p>{error}</p>{whatsappFallback && <a href={waLink(siteConfig.whatsappRaw, "Hello Safar Traders, I'd like to submit an RFQ.")} target="_blank" rel="noopener noreferrer">Continue on WhatsApp</a>}</div>}
+              <label className="form-note" style={{ display: "flex", alignItems: "flex-start", gap: "0.55rem", margin: 0 }}>
+                <input type="checkbox" name="privacyConsent" required style={{ marginTop: "0.2rem" }} />
+                <span>I agree to the processing of my details as described in the <Link href={siteConfig.legal.privacyPolicyUrl}>Privacy Policy</Link>.</span>
+              </label>
               <button type="submit" className="btn btn-primary submit-btn" disabled={submitting}>
                 {submitting ? "Submitting..." : <>Submit RFQ <ArrowRight size={15} aria-hidden="true" /></>}
               </button>

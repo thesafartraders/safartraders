@@ -3,12 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence, useReducedMotion, type PanInfo } from "framer-motion";
-import { ArrowLeft, BadgeCheck, FileText, ShieldCheck, X } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight, BadgeCheck, FileText, ShieldCheck, X } from "lucide-react";
+import teamMashok from "@/images/company-profile/mashok.jpg";
+import teamSreeram from "@/images/company-profile/sreeram.jpg";
+import teamBhaiImg from "@/images/company-profile/bhaiimg.png";
 
 /**
  * Small assistive "ball" anchored to the right edge of the hero, mobile only.
  * Tap it, or swipe it left from the right edge, to open a short dialog
- * announcing the Company Profile page is coming soon.
+ * pointing buyers to the Company Profile page.
  */
 export default function CompanyProfileTeaser() {
   const [open, setOpen] = useState(false);
@@ -46,7 +51,7 @@ export default function CompanyProfileTeaser() {
       <motion.button
         type="button"
         className="company-profile-ball"
-        aria-label="Company Profile — coming soon"
+        aria-label="View company profile"
         onClick={() => setOpen(true)}
         drag="x"
         dragConstraints={{ left: -10, right: 0 }}
@@ -96,27 +101,48 @@ export default function CompanyProfileTeaser() {
               </div>
 
               <div className="company-profile-dialog-content">
-                <span className="company-profile-dialog-icon">
-                  <FileText size={26} strokeWidth={1.8} aria-hidden="true" />
-                </span>
-                <p className="company-profile-dialog-eyebrow">Trust centre</p>
-                <h2 id="company-profile-dialog-title">Our company profile is being prepared.</h2>
+                <p className="company-profile-dialog-eyebrow">About us</p>
+                <h2 id="company-profile-dialog-title">Get to know Safar Traders.</h2>
                 <p className="company-profile-dialog-copy">
-                  We are bringing together the details buyers need to assess Safar Traders with confidence — our business profile, sourcing process, and supporting credentials.
+                  Safar Traders is a procurement and export partner built on R&amp;D-led sourcing, verified suppliers, and a hands-on team that stays with your order from first requirement to final document.
                 </p>
 
+                {/* Team photos */}
+                <div className="company-profile-team-grid" aria-label="The team">
+                  <div className="company-profile-team-member">
+                    <div className="company-profile-team-photo">
+                      <Image src={teamMashok} alt="Mashok" fill sizes="80px" style={{ objectFit: "cover" }} />
+                    </div>
+                    <span className="company-profile-team-name">Mashok</span>
+                    <span className="company-profile-team-role">Sourcing &amp; Operations</span>
+                  </div>
+                  <div className="company-profile-team-member">
+                    <div className="company-profile-team-photo">
+                      <Image src={teamSreeram} alt="Sreeram" fill sizes="80px" style={{ objectFit: "cover" }} />
+                    </div>
+                    <span className="company-profile-team-name">Sreeram</span>
+                    <span className="company-profile-team-role">Trade &amp; Export</span>
+                  </div>
+                  <div className="company-profile-team-member">
+                    <div className="company-profile-team-photo">
+                      <Image src={teamBhaiImg} alt="Bhai" fill sizes="80px" style={{ objectFit: "cover" }} />
+                    </div>
+                    <span className="company-profile-team-name">Bhai</span>
+                    <span className="company-profile-team-role">Export &amp; Documentation</span>
+                  </div>
+                </div>
+
                 <div className="company-profile-trust-list" aria-label="Company profile contents">
-                  <div><ShieldCheck size={19} aria-hidden="true" /><span>Business and trade information</span></div>
-                  <div><BadgeCheck size={19} aria-hidden="true" /><span>Certificates and verification documents</span></div>
+                  <div><ShieldCheck size={19} aria-hidden="true" /><span>Our sourcing and trade approach</span></div>
+                  <div><BadgeCheck size={19} aria-hidden="true" /><span>The team behind Safar Traders</span></div>
                   <div><FileText size={19} aria-hidden="true" /><span>Export and sourcing capabilities</span></div>
                 </div>
               </div>
 
               <div className="company-profile-dialog-footer">
-                <p>Expected this month</p>
-                <button type="button" className="company-profile-dialog-exit" onClick={() => setOpen(false)}>
-                  <ArrowLeft size={18} aria-hidden="true" /> Continue browsing
-                </button>
+                <Link href="/company-profile" className="company-profile-dialog-exit" onClick={() => setOpen(false)}>
+                  View company profile <ArrowRight size={18} aria-hidden="true" />
+                </Link>
               </div>
             </motion.div>
           </>

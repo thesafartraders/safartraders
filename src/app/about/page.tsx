@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import RFQWizardLauncher from "@/components/RFQWizardLauncher";
-import { siteConfig } from "@/lib/site-config";
+import { createBreadcrumbSchema, createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About Us",
-  description:
-    "Safar Traders is a trade and export partner for buyers who need reliable sourcing support across multiple non-perishable industrial and commercial product categories.",
-  alternates: { canonical: `${siteConfig.url}/about` },
-};
+export const metadata: Metadata = createPageMetadata({
+  pathname: "/about",
+  title: "About Safar Traders — Trade & Export Partner",
+  description: "Meet Safar Traders, a trade and export partner for buyers needing reliable industrial and commercial sourcing support from India.",
+});
+
+const breadcrumbSchema = createBreadcrumbSchema([{ name: "Home" }, { name: "About", pathname: "/about" }]);
 
 const values = [
   {
@@ -17,7 +18,7 @@ const values = [
   },
   {
     label: "Document-complete",
-    detail: "A shipment is not closed until every document is in order — BL, invoice, packing list, COO, and any required inspection certificates.",
+    detail: "A shipment is not closed until every document is in order — BL, invoice, Packing List, COO, and any required inspection certificates.",
   },
   {
     label: "Buyer-responsive",
@@ -32,6 +33,7 @@ const values = [
 export default function AboutPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <PageHero
         eyebrow="About Us"
         title="Built around a single idea: one partner, one process."

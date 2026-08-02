@@ -15,7 +15,7 @@ const steps = [
     code: "02",
     title: "Supplier Fit & Feasibility",
     description:
-      "We check supplier suitability, availability, product match, and practical pricing context so buyers receive a relevant sourcing response.",
+      "We check supplier suitability, sourcing feasibility, product match, and practical pricing context so buyers receive a relevant sourcing response.",
   },
   {
     code: "03",
@@ -39,7 +39,7 @@ const steps = [
     code: "06",
     title: "Shipping, Documentation & Delivery",
     description:
-      "Container is sealed and shipped with Bill of Lading, Packing List, Certificate of Origin, and clearance documents prepared. Documents are released on agreed payment terms, with support available for post-shipment queries.",
+      "The container is sealed and shipped with the Bill of Lading, Packing List, Certificate of Origin, and clearance documents. Documents are released on agreed payment terms, with support available for post-shipment queries.",
   },
 ];
 

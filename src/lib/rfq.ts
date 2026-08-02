@@ -27,6 +27,7 @@ export type RfqPayload = {
   phone: string;
   whatsapp?: string;
   whatsappConsent: boolean;
+  privacyConsent: boolean;
 };
 
 export type RfqSubmitResponse = {
@@ -36,6 +37,7 @@ export type RfqSubmitResponse = {
   pdfBase64?: string;
   pdfFileName?: string;
   emailSent?: boolean;
+  emailNote?: string;
   whatsappBuyerSent?: boolean;
   whatsappTeamSent?: boolean;
   whatsappManualUrl?: string;
@@ -81,8 +83,15 @@ export function normalizeRfqPayload(body: Partial<RfqPayload>): RfqPayload {
     email: cleanRfqString(body.email, 200),
     phone: cleanRfqString(body.phone, 100),
     whatsapp: cleanRfqString(body.whatsapp, 100),
-    whatsappConsent: Boolean(body.whatsappConsent),
+    whatsappConsent: body.whatsappConsent === true,
+    privacyConsent: body.privacyConsent === true,
   };
+}
+
+export function isHighPriority(quantity?: string, monthlyRequirement?: string) {
+  const qty = `${quantity || ""} ${monthlyRequirement || ""}`.toLowerCase();
+  const mtMatch = qty.match(/(\d{2,})\s*mt/);
+  return Boolean((mtMatch && Number(mtMatch[1]) >= 100) || /container|monthly|recurring|fcl/.test(qty));
 }
 
 export function rfqMissingFields(rfq: RfqPayload) {
@@ -94,6 +103,7 @@ export function rfqMissingFields(rfq: RfqPayload) {
   if (!rfq.companyName) missing.push("companyName");
   if (!rfq.contactPerson) missing.push("contactPerson");
   if (!rfq.phone) missing.push("phone");
+  if (!rfq.privacyConsent) missing.push("privacyConsent");
   return missing;
 }
 
@@ -117,5 +127,6 @@ export function rfqToMessage(rfq: RfqPayload) {
     rfq.addressZip && `Company ZIP/PIN: ${rfq.addressZip}`,
     rfq.whatsapp && `WhatsApp: ${rfq.whatsapp}`,
     `WhatsApp consent: ${rfq.whatsappConsent ? "Yes" : "No"}`,
+    `Privacy-policy consent: ${rfq.privacyConsent ? "Yes" : "No"}`,
   ].filter(Boolean).join("\n");
 }

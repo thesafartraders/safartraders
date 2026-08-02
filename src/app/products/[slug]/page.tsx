@@ -6,6 +6,8 @@ import { siteConfig } from "@/lib/site-config";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return productCategories.map((category) => ({ slug: category.slug }));
 }
@@ -14,6 +16,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const category = getProductCategory(slug);
   if (!category) return {};
+  const imageUrl = `${siteConfig.url}/og/${category.slug}`;
 
   return {
     title: category.seoTitle,
@@ -24,9 +27,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: category.metaDescription,
       url: `${siteConfig.url}/products/${category.slug}`,
       type: "website",
+      locale: "en_US",
+      siteName: siteConfig.name,
       images: [
         {
-          url: siteConfig.ogImage,
+          url: imageUrl,
           width: 1200,
           height: 630,
           alt: `${category.title} sourcing by ${siteConfig.name}`,
@@ -37,7 +42,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: "summary_large_image",
       title: category.seoTitle,
       description: category.metaDescription,
-      images: [siteConfig.ogImage],
+      images: [imageUrl],
     },
   };
 }

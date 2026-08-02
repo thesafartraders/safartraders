@@ -19,6 +19,15 @@ import { siteConfig } from "@/lib/site-config";
  * they give you.
  */
 
+export function isSmtpConfigured() {
+  return Boolean(
+    process.env.SMTP_HOST &&
+      process.env.SMTP_USER &&
+      process.env.SMTP_PASS &&
+      process.env.LEAD_FROM_EMAIL
+  );
+}
+
 function getTransport() {
   const host = process.env.SMTP_HOST;
   const port = Number(process.env.SMTP_PORT || 587);
@@ -36,6 +45,9 @@ function getTransport() {
     port,
     secure: port === 465,
     auth: { user, pass },
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 15_000,
   });
 }
 
@@ -83,7 +95,10 @@ function renderRow(label: string, value?: string) {
 export async function sendLeadEmail(lead: LeadPayload) {
   const transport = getTransport();
   const to = process.env.LEAD_NOTIFY_EMAIL || siteConfig.email;
-  const from = process.env.LEAD_FROM_EMAIL || `"${siteConfig.name} Website" <no-reply@${new URL(siteConfig.url).hostname}>`;
+  const from = process.env.LEAD_FROM_EMAIL;
+  if (!from) {
+    throw new Error("SMTP is configured but LEAD_FROM_EMAIL is missing. Set it to a verified sender address.");
+  }
 
   const sourceLabel =
     lead.source === "rfq-wizard"
@@ -138,6 +153,7 @@ export async function sendLeadEmail(lead: LeadPayload) {
         <p style="margin:0;font-size:11px;color:#555555;">Sent automatically from ${escapeHtml(
           siteConfig.name
         )} website lead capture.</p>
+        <p style="margin:6px 0 0;font-size:11px;color:#555555;">Handle this personal data only for the submitted trade requirement and according to the published privacy policy.</p>
       </div>
     </div>
   </div>`;
@@ -153,7 +169,9 @@ export async function sendLeadEmail(lead: LeadPayload) {
     lead.product ? `Product: ${lead.product}` : undefined,
     lead.quantity ? `Quantity: ${lead.quantity}` : undefined,
     lead.destinationPort ? `Destination Port: ${lead.destinationPort}` : undefined,
+    lead.monthlyRequirement ? `Monthly Requirement: ${lead.monthlyRequirement}` : undefined,
     lead.timeline ? `Timeline: ${lead.timeline}` : undefined,
+    lead.locale ? `Locale: ${lead.locale}` : undefined,
     lead.message ? `Message: ${lead.message}` : undefined,
   ].filter(Boolean).join("\n");
 

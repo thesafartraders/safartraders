@@ -1,3 +1,11 @@
+import type { StaticImageData } from "next/image";
+import customSourcingImage from "@/images/industrialsourcing.webp";
+import documentationImage from "@/images/industrialmaterial.webp";
+import inspectionImage from "@/images/construction.webp";
+import packingImage from "@/images/packing.webp";
+import tradeTermsImage from "@/images/metalandalloy.webp";
+import sourcingScopeImage from "@/images/machine.webp";
+
 export type ResourceSection = {
   heading: string;
   body: string[];
@@ -13,6 +21,10 @@ export type ResourceGuide = {
   datePublished: string;
   dateModified: string;
   readTime: string;
+  image: StaticImageData;
+  imageAlt: string;
+  relatedSlugs?: string[];
+  links?: { label: string; href: string }[];
   intro: string[];
   sections: ResourceSection[];
   checklist: { heading: string; items: string[] };
@@ -31,8 +43,15 @@ export const resourceGuides: ResourceGuide[] = [
     metaDescription:
       "A complete guide to preparing an industrial RFQ — what details to include, why each one matters, and the most common mistakes that delay a quotation.",
     datePublished: "2026-07-10",
-    dateModified: "2026-07-10",
+    dateModified: "2026-08-03",
     readTime: "6 min read",
+    image: customSourcingImage,
+    imageAlt: "Industrial sourcing and procurement planning",
+    relatedSlugs: ["pre-shipment-inspection", "trade-terms", "custom-sourcing-scope"],
+    links: [
+      { label: "Plan your pre-shipment inspection", href: "/resources/pre-shipment-inspection" },
+      { label: "Discuss your sourcing requirement", href: "/contact" },
+    ],
     intro: [
       "Most delays in industrial sourcing don't happen during shipping or production — they happen before a quotation is even issued, because the original request didn't carry enough information to act on. An RFQ (Request for Quotation) is the starting point of the entire sourcing process, and the quality of that first message determines how quickly — and how accurately — a usable quotation can be prepared.",
       "This guide walks through what a complete industrial RFQ looks like, why each detail matters to the sourcing team on the other end, and where buyers most commonly lose time by leaving out information that seems minor but isn't.",
@@ -42,7 +61,7 @@ export const resourceGuides: ResourceGuide[] = [
         heading: "Why specification detail changes the outcome",
         body: [
           "A product name alone is rarely enough to source correctly. \"Stainless steel sheets\" could mean a dozen different grades, thicknesses, and finishes, each with a different supplier base and a different price point. When the grade or standard isn't specified, the sourcing team either has to guess — which risks quoting the wrong product — or send a clarification message back, which adds a full round trip before anything else can move forward.",
-          "The fix is simple: include the technical description exactly as you'd specify it on a purchase order, even at RFQ stage. Grade, standard, dimensions, and application context all narrow the search immediately and let the team check supplier availability against your actual requirement instead of an assumption.",
+          "The fix is simple: include the technical description exactly as you'd specify it on a purchase order, even at RFQ stage. Grade, standard, dimensions, and application context all narrow the search immediately and let the team assess sourcing feasibility against your actual requirement instead of an assumption.",
         ],
       },
       {
@@ -62,7 +81,7 @@ export const resourceGuides: ResourceGuide[] = [
       {
         heading: "Packing preference is a cost decision, not a detail",
         body: [
-          "Packing affects container utilisation, handling risk, and total freight cost — sometimes significantly. A buyer who states a packing preference upfront (palletized vs loose, for example, or specific moisture protection for a humid destination) gets a quotation that already reflects the real shipping cost, rather than one that has to be revised once packing is discussed later in the process.",
+          "Packing affects container utilization, handling risk, and total freight cost — sometimes significantly. A buyer who states a packing preference upfront (palletized vs loose, for example, or specific moisture protection for a humid destination) gets a quotation that already reflects the real shipping cost, rather than one that has to be revised once packing is discussed later in the process.",
         ],
       },
     ],
@@ -89,7 +108,7 @@ export const resourceGuides: ResourceGuide[] = [
         "Assuming packing is a later-stage detail, when it materially changes landed cost.",
       ],
     },
-    why: "Incomplete RFQs usually delay quotation because supplier availability, packing, and logistics cannot be checked properly. A complete RFQ is the fastest path to an accurate, usable quotation.",
+    why: "Incomplete RFQs usually delay quotation because sourcing feasibility, packing, and logistics cannot be checked properly. A complete RFQ is the fastest path to an accurate, usable quotation.",
   },
   {
     slug: "export-documentation",
@@ -101,8 +120,15 @@ export const resourceGuides: ResourceGuide[] = [
     metaDescription:
       "A practical checklist of export documents buyers review before shipment, including what each document does and why it matters for customs clearance.",
     datePublished: "2026-07-10",
-    dateModified: "2026-07-10",
+    dateModified: "2026-08-03",
     readTime: "7 min read",
+    image: documentationImage,
+    imageAlt: "Industrial materials prepared for export documentation",
+    relatedSlugs: ["packing-loading", "pre-shipment-inspection", "trade-terms"],
+    links: [
+      { label: "Confirm packing and loading details", href: "/resources/packing-loading" },
+      { label: "Discuss your document requirements", href: "/contact" },
+    ],
     intro: [
       "Export documentation exists for one practical reason: it lets customs authorities, banks, freight forwarders, and the buyer's own receiving team verify that a shipment is what it claims to be, in the quantity claimed, from the source claimed. Missing or inconsistent documents are one of the most common causes of clearance delay — not because the product itself is a problem, but because the paperwork doesn't match it cleanly.",
       "This guide explains the documents that come up most often in industrial export shipments, what each one actually does, and why the requirement list can change from one shipment to the next.",
@@ -111,8 +137,8 @@ export const resourceGuides: ResourceGuide[] = [
       {
         heading: "The core documents and what each one proves",
         body: [
-          "The commercial invoice is the legal record of the sale — it states what was sold, to whom, at what price, and under what terms. Customs authorities use it to assess duty, and banks use it to process payment under the agreed terms. Every figure on it needs to match the purchase order and the packing list exactly; even small mismatches can trigger a clearance query.",
-          "The packing list complements the invoice by describing how the goods are physically packed — carton counts, weights, dimensions, and how the cargo is distributed across the shipment. Customs and freight handlers use it to verify that what's declared matches what's loaded, and it's often the first document checked during a physical inspection.",
+          "The commercial invoice is the legal record of the sale — it states what was sold, to whom, at what price, and under what terms. Customs authorities use it to assess duty, and banks use it to process payment under the agreed terms. Every figure on it needs to match the purchase order and the Packing List exactly; even small mismatches can trigger a clearance query.",
+          "The Packing List complements the invoice by describing how the goods are physically packed — carton counts, weights, dimensions, and how the cargo is distributed across the shipment. Customs and freight handlers use it to verify that what's declared matches what's loaded, and it's often the first document checked during a physical inspection.",
           "The bill of lading (for sea freight) or airway bill (for air freight) is issued by the carrier and serves as both a receipt for the cargo and, in the case of an original bill of lading, a transferable document of title. Depending on the payment terms agreed, the buyer may need an original bill of lading released before taking possession of the goods at the destination port.",
         ],
       },
@@ -135,7 +161,7 @@ export const resourceGuides: ResourceGuide[] = [
       heading: "Documents to confirm before shipment",
       items: [
         "Commercial invoice",
-        "Packing list",
+        "Packing List",
         "Bill of lading or airway bill",
         "Certificate of origin",
         "Inspection report if required",
@@ -147,7 +173,7 @@ export const resourceGuides: ResourceGuide[] = [
       heading: "Common mistakes that cause clearance delays",
       items: [
         "Assuming the same document list applies regardless of destination country.",
-        "Letting invoice figures drift slightly from the packing list or purchase order.",
+        "Letting invoice figures drift slightly from the Packing List or purchase order.",
         "Requesting a certificate of origin after the goods have already shipped.",
         "Not confirming who is responsible for arranging and paying for inspection.",
         "Treating documentation as a final-stage task instead of planning it alongside the order.",
@@ -161,12 +187,19 @@ export const resourceGuides: ResourceGuide[] = [
     title: "How verification supports procurement teams",
     summary:
       "Inspection scope should be agreed before loading. For many industrial orders, inspection can include product condition, quantity, packing, marking, and loading checks.",
-    seoTitle: "Pre-Shipment Inspection Guide for Industrial Buyers",
+    seoTitle: "Pre-Shipment Inspection Guide for Buyers",
     metaDescription:
       "How pre-shipment inspection works for industrial orders — what gets checked, who can carry it out, and how to agree inspection scope before loading.",
     datePublished: "2026-07-10",
-    dateModified: "2026-07-10",
+    dateModified: "2026-08-03",
     readTime: "5 min read",
+    image: inspectionImage,
+    imageAlt: "Industrial construction materials ready for inspection",
+    relatedSlugs: ["rfq-preparation", "packing-loading", "export-documentation"],
+    links: [
+      { label: "Prepare a complete sourcing request", href: "/resources/rfq-preparation" },
+      { label: "Discuss an inspection requirement", href: "/contact" },
+    ],
     intro: [
       "Pre-shipment inspection is the verification step that happens after production but before the container is sealed — confirming that what's about to ship actually matches what was agreed. For buyers who haven't visited the supplier's facility, or who are sourcing at a distance, it's the single most effective way to catch a problem while it's still cheap and fast to fix.",
       "The value of inspection comes entirely from agreeing its scope upfront. An inspection that's arranged after loading has already started, or with no clear checklist, tends to confirm very little.",
@@ -224,10 +257,17 @@ export const resourceGuides: ResourceGuide[] = [
       "Packing affects freight cost, handling safety, container use, and customs documentation. It should be discussed before final quotation whenever possible.",
     seoTitle: "Export Packing Guide for Industrial Shipments",
     metaDescription:
-      "How packing choices affect freight cost, container utilisation, and shipment safety — and what details to confirm before a quotation is finalised.",
+      "How packing choices affect freight cost, container utilization, and shipment safety — and what details to confirm before a quotation is finalized.",
     datePublished: "2026-07-10",
-    dateModified: "2026-07-10",
+    dateModified: "2026-08-03",
     readTime: "5 min read",
+    image: packingImage,
+    imageAlt: "Packed industrial goods ready for shipment",
+    relatedSlugs: ["export-documentation", "pre-shipment-inspection", "trade-terms"],
+    links: [
+      { label: "Review export documentation", href: "/resources/export-documentation" },
+      { label: "Discuss packing for your shipment", href: "/contact" },
+    ],
     intro: [
       "Packing is sometimes treated as an operational detail to be sorted out after pricing is agreed. In practice, packing method is one of the biggest variables behind the final landed cost of an industrial shipment — it affects how efficiently a container is used, how much handling risk the cargo carries, and what documentation is needed at customs. Getting it agreed early avoids re-quoting later.",
     ],
@@ -242,7 +282,7 @@ export const resourceGuides: ResourceGuide[] = [
       {
         heading: "Container type and load planning",
         body: [
-          "Standard 20ft and 40ft containers suit most general cargo, but heavier or denser materials (certain metals, stone, machinery) may hit weight limits before they fill the available volume — meaning a 40ft container might not be the most economical choice even though it looks like more space. For oversized or irregular cargo, flat-rack or break-bulk shipping may be required instead of standard containerization.",
+          "Standard 20 ft and 40 ft containers suit most general cargo, but heavier or denser materials (certain metals, stone, machinery) may hit weight limits before they fill the available volume — meaning a 40 ft container might not be the most economical choice even though it looks like more space. For oversized or irregular cargo, flat-rack or break-bulk shipping may be required instead of standard containerization.",
           "LCL (less than container load) shipping lets a buyer order smaller quantities without paying for a full container, but it usually costs more per unit and takes longer in transit, since LCL cargo is consolidated with other shipments at origin and deconsolidated at destination.",
         ],
       },
@@ -269,7 +309,7 @@ export const resourceGuides: ResourceGuide[] = [
       heading: "Common mistakes that increase shipping cost",
       items: [
         "Assuming the supplier's default packing method is the most cost-effective for your shipment.",
-        "Choosing a 40ft container by default without checking against weight limits for dense cargo.",
+        "Choosing a 40 ft container by default without checking against weight limits for dense cargo.",
         "Skipping moisture protection for long sea transits to humid destinations.",
         "Not confirming destination labeling requirements until the goods are already packed.",
         "Leaving loading supervision unconfirmed, then discovering no photos or videos were taken.",
@@ -287,8 +327,15 @@ export const resourceGuides: ResourceGuide[] = [
     metaDescription:
       "A buyer-focused explanation of Incoterms, payment terms, and the commercial details that turn a rough price into an accurate, usable quotation.",
     datePublished: "2026-07-10",
-    dateModified: "2026-07-10",
+    dateModified: "2026-08-03",
     readTime: "6 min read",
+    image: tradeTermsImage,
+    imageAlt: "Industrial metal materials for international trade",
+    relatedSlugs: ["rfq-preparation", "packing-loading", "export-documentation"],
+    links: [
+      { label: "Include commercial details in your RFQ", href: "/resources/rfq-preparation" },
+      { label: "Discuss quotation terms", href: "/contact" },
+    ],
     intro: [
       "A price quoted without trade terms attached isn't really a complete quotation — it's a starting figure. Two suppliers quoting the same per-unit price under different Incoterms can mean very different total costs once freight, insurance, and risk responsibility are factored in. This guide explains the commercial terms worth clarifying before treating any quotation as comparable or final.",
     ],
@@ -296,7 +343,7 @@ export const resourceGuides: ResourceGuide[] = [
       {
         heading: "Incoterms determine who pays for what, and when risk transfers",
         body: [
-          "Incoterms (International Commercial Terms) are a standardised set of trade terms that define exactly where the seller's responsibility ends and the buyer's begins — covering transport cost, insurance, customs clearance, and the point at which risk of loss or damage transfers from seller to buyer.",
+          "Incoterms (International Commercial Terms) are a standardized set of trade terms that define exactly where the seller's responsibility ends and the buyer's begins — covering transport cost, insurance, customs clearance, and the point at which risk of loss or damage transfers from seller to buyer.",
           "EXW (Ex Works) places almost all responsibility on the buyer from the seller's premises onward — the buyer arranges and pays for everything from pickup to final delivery. FOB (Free on Board) shifts responsibility to the buyer once goods are loaded onto the vessel at the origin port, meaning the seller handles inland transport and export clearance, but the buyer arranges and pays for ocean freight. CIF (Cost, Insurance, and Freight) goes further — the seller arranges and pays for freight and insurance to the destination port, though risk technically transfers once goods are loaded, similar to FOB. CFR (Cost and Freight) is the same as CIF but without seller-arranged insurance.",
           "None of these is universally \"better\" — the right choice depends on whether the buyer has their own freight forwarding relationships and wants control over shipping, or would rather have the seller manage logistics end-to-end for a single landed price.",
         ],
@@ -305,7 +352,7 @@ export const resourceGuides: ResourceGuide[] = [
         heading: "Currency, payment terms, and validity period",
         body: [
           "Currency matters because exchange rate movement between quotation and payment can shift the real cost of an order, particularly for longer production lead times. Agreeing currency upfront avoids ambiguity about which exchange rate applies if there's a gap between quotation and invoice.",
-          "Payment terms — advance payment, payment against documents, letter of credit, or open account — affect both risk and cash flow for both sides, and should be discussed before a quotation is finalised rather than assumed. A quotation's validity period also matters: raw material and freight costs can shift, so a quotation that doesn't specify how long it remains valid leaves both sides exposed to repricing disputes if there's a delay between quotation and order confirmation.",
+          "Payment terms — advance payment, payment against documents, letter of credit, or open account — affect both risk and cash flow for both sides, and should be discussed before a quotation is finalized rather than assumed. A quotation's validity period also matters: raw material and freight costs can shift, so a quotation that doesn't specify how long it remains valid leaves both sides exposed to repricing disputes if there's a delay between quotation and order confirmation.",
         ],
       },
       {
@@ -349,8 +396,15 @@ export const resourceGuides: ResourceGuide[] = [
     metaDescription:
       "How to scope a custom or non-standard industrial sourcing requirement so it can be matched to the right supplier quickly and accurately.",
     datePublished: "2026-07-10",
-    dateModified: "2026-07-10",
+    dateModified: "2026-08-03",
     readTime: "5 min read",
+    image: sourcingScopeImage,
+    imageAlt: "Industrial machinery for a custom sourcing requirement",
+    relatedSlugs: ["rfq-preparation", "trade-terms", "pre-shipment-inspection"],
+    links: [
+      { label: "Prepare a complete sourcing request", href: "/resources/rfq-preparation" },
+      { label: "Discuss your custom requirement", href: "/contact" },
+    ],
     intro: [
       "Standard products are relatively easy to source — the specification is well known and the supplier base is established. Custom or non-standard requirements are different: the product name alone often isn't enough to identify a suitable supplier, because the requirement sits outside a typical catalogue listing. Defining scope properly upfront is what makes the difference between a fast, accurate sourcing response and a long back-and-forth.",
     ],

@@ -1,54 +1,63 @@
 import type { StaticImageData } from "next/image";
-import constructionImage from "@/images/construction.jpg";
-import engineeringImage from "@/images/engineering.jpg";
-import industrialMaterialsImage from "@/images/industrialmaterial.jpg";
-import industrialScrapImage from "@/images/industrialscrap.jpg";
-import customSourcingImage from "@/images/industrialsourcing.jpg";
-import machineryImage from "@/images/machine.jpg";
-import metalsAlloysImage from "@/images/metalandalloy.jpg";
-import packagingImage from "@/images/packing.jpg";
-import automationEquipmentImage from "@/images/catalog/Automation Equipment.png";
-import buildingMaterialsImage from "@/images/catalog/Building Materials.png";
-import bulkHandlingSuppliesImage from "@/images/catalog/Bulk Handling Supplies.png";
-import buyerLedRequirementsImage from "@/images/catalog/Buyer-Led Requirements.png";
-import cartonsCorrugatedPackagingImage from "@/images/catalog/Cartons & Corrugated Packaging.png";
-import commercialSupplyRequirementsImage from "@/images/catalog/Commercial Supply Requirements.png";
-import customManufacturedPartsImage from "@/images/catalog/Custom Manufactured Parts.png";
-import domesticExportSupplySupportImage from "@/images/catalog/Domestic and Export Supply Support.png";
-import electronicScrapImage from "@/images/catalog/Electronic Scrap.png";
-import engineeringMaterialsImage from "@/images/catalog/Engineering Materials.png";
-import fabricatedComponentsImage from "@/images/catalog/Fabricated Components.png";
-import fastenersImage from "@/images/catalog/Fasteners.png";
-import graniteImage from "@/images/catalog/Granite.png";
-import marbleImage from "@/images/catalog/marbel.png";
-import naturalStoneImage from "@/images/catalog/naturalstone.png";
-import heavyEquipmentImage from "@/images/catalog/Heavy Equipment.png";
-import industrialChemicalsImage from "@/images/catalog/Industrial Chemicals.png";
-import industrialHardwareImage from "@/images/catalog/Industrial Hardware.png";
-import industrialPackingMaterialsImage from "@/images/catalog/Industrial Packing Materials.png";
-import industrialToolsImage from "@/images/catalog/Industrial Tools.png";
-import manufacturingMachineryImage from "@/images/catalog/Manufacturing Machinery.png";
-import mechanicalPartsImage from "@/images/catalog/Mechanical Parts.png";
-import metalScrapImage from "@/images/catalog/Metal Scrap.png";
-import mineralsImage from "@/images/catalog/Minerals.png";
-import nonStandardProductRequestsImage from "@/images/catalog/Non-Standard Product Requests.png";
-import packagingMaterialsImage from "@/images/catalog/Packaging Materials.png";
-import paperCardboardImage from "@/images/catalog/Paper & Cardboard.png";
-import plasticPackagingImage from "@/images/catalog/Plastic Packaging.png";
-import plasticScrapImage from "@/images/catalog/Plastic Scrap.png";
-import plasticsPolymersImage from "@/images/catalog/Plastics & Polymers.png";
-import processingEquipmentImage from "@/images/catalog/Processing Equipment.png";
-import procurementCoordinationImage from "@/images/catalog/Procurement Coordination.png";
-import rubberScrapImage from "@/images/catalog/Rubber Scrap.png";
-import supplierIdentificationImage from "@/images/catalog/Supplier Identification.png";
-import aluminiumImage from "@/images/catalog/aluminium.png";
-import brassImage from "@/images/catalog/brass.png";
-import copperImage from "@/images/catalog/copper.png";
-import ferrousImage from "@/images/catalog/ferrous.png";
-import nickelAlloysImage from "@/images/catalog/image on Nickel Alloys.png";
-import nonFerrousImage from "@/images/catalog/nonferrous.png";
-import stainlessSteelImage from "@/images/catalog/stainlesssteel.png";
-import tilesImage from "@/images/catalog/tiles.png";
+import constructionImage from "@/images/construction.webp";
+import engineeringImage from "@/images/engineering.webp";
+import industrialMaterialsImage from "@/images/industrialmaterial.webp";
+import industrialScrapImage from "@/images/industrialscrap.webp";
+import customSourcingImage from "@/images/industrialsourcing.webp";
+import machineryImage from "@/images/machine.webp";
+import metalsAlloysImage from "@/images/metalandalloy.webp";
+import packagingImage from "@/images/packing.webp";
+import automationEquipmentImage from "@/images/catalog/Automation Equipment.webp";
+import buildingMaterialsImage from "@/images/catalog/Building Materials.webp";
+import bulkHandlingSuppliesImage from "@/images/catalog/Bulk Handling Supplies.webp";
+import buyerLedRequirementsImage from "@/images/catalog/Buyer-Led Requirements.webp";
+import cartonsCorrugatedPackagingImage from "@/images/catalog/Cartons & Corrugated Packaging.webp";
+import commercialSupplyRequirementsImage from "@/images/catalog/Commercial Supply Requirements.webp";
+import customManufacturedPartsImage from "@/images/catalog/Custom Manufactured Parts.webp";
+import domesticExportSupplySupportImage from "@/images/catalog/Domestic and Export Supply Support.webp";
+import electronicScrapImage from "@/images/catalog/Electronic Scrap.webp";
+import engineeringMaterialsImage from "@/images/catalog/Engineering Materials.webp";
+import fabricatedComponentsImage from "@/images/catalog/Fabricated Components.webp";
+import fastenersImage from "@/images/catalog/Fasteners.webp";
+import graniteImage from "@/images/catalog/Granite.webp";
+import marbleImage from "@/images/catalog/marbel.webp";
+import naturalStoneImage from "@/images/catalog/naturalstone.webp";
+import heavyEquipmentImage from "@/images/catalog/Heavy Equipment.webp";
+import industrialChemicalsImage from "@/images/catalog/Industrial Chemicals.webp";
+import industrialHardwareImage from "@/images/catalog/Industrial Hardware.webp";
+import industrialPackingMaterialsImage from "@/images/catalog/Industrial Packing Materials.webp";
+import industrialToolsImage from "@/images/catalog/Industrial Tools.webp";
+import manufacturingMachineryImage from "@/images/catalog/Manufacturing Machinery.webp";
+import mechanicalPartsImage from "@/images/catalog/Mechanical Parts.webp";
+import metalScrapImage from "@/images/catalog/Metal Scrap.webp";
+import mineralsImage from "@/images/catalog/Minerals.webp";
+import nonStandardProductRequestsImage from "@/images/catalog/Non-Standard Product Requests.webp";
+import packagingMaterialsImage from "@/images/catalog/Packaging Materials.webp";
+import paperCardboardImage from "@/images/catalog/Paper & Cardboard.webp";
+import plasticPackagingImage from "@/images/catalog/Plastic Packaging.webp";
+import plasticScrapImage from "@/images/catalog/Plastic Scrap.webp";
+import plasticsPolymersImage from "@/images/catalog/Plastics & Polymers.webp";
+import processingEquipmentImage from "@/images/catalog/Processing Equipment.webp";
+import procurementCoordinationImage from "@/images/catalog/Procurement Coordination.webp";
+import rubberScrapImage from "@/images/catalog/Rubber Scrap.webp";
+import supplierIdentificationImage from "@/images/catalog/Supplier Identification.webp";
+import aluminiumImage from "@/images/catalog/aluminium.webp";
+import brassImage from "@/images/catalog/brass.webp";
+import copperImage from "@/images/catalog/copper.webp";
+import ferrousImage from "@/images/catalog/ferrous.webp";
+import nickelAlloysImage from "@/images/catalog/image on Nickel Alloys.webp";
+import nonFerrousImage from "@/images/catalog/nonferrous.webp";
+import stainlessSteelImage from "@/images/catalog/stainlesssteel.webp";
+import tilesImage from "@/images/catalog/tiles.webp";
+import poolBannerImage from "@/images/catalog/pool-images/pool-banner.webp";
+import poolChemicalsImage from "@/images/catalog/pool-images/pool-chemicals.webp";
+import poolCleaningImage from "@/images/catalog/pool-images/pool-cleaners.webp";
+import poolLifeSavingImage from "@/images/catalog/pool-images/pool-savings.webp";
+import poolHeatingImage from "@/images/catalog/pool-images/pool-heating.webp";
+import poolFiltersImage from "@/images/catalog/pool-images/pool-filters.webp";
+import poolPumpsImage from "@/images/catalog/pool-images/pool-pumps.webp";
+import poolLightsImage from "@/images/catalog/pool-images/pool-lights.webp";
+import poolAccessoriesImage from "@/images/catalog/pool-images/pool-accessories.webp";
 
 export type ProductSubcategory = {
   slug: string;
@@ -118,6 +127,14 @@ export const catalogImages: Record<string, StaticImageData> = {
   "procurement-coordination": procurementCoordinationImage,
   "non-standard-product-requests": nonStandardProductRequestsImage,
   "domestic-export-supply-support": domesticExportSupplySupportImage,
+  "swimming-pool-chemicals": poolChemicalsImage,
+  "pool-cleaning-equipment": poolCleaningImage,
+  "pool-life-saving-equipment": poolLifeSavingImage,
+  "pool-heating-systems": poolHeatingImage,
+  "pool-filters": poolFiltersImage,
+  "pool-pumps": poolPumpsImage,
+  "pool-lights": poolLightsImage,
+  "pool-accessories": poolAccessoriesImage,
 };
 
 const standardDocuments = [
@@ -129,6 +146,90 @@ const standardDocuments = [
 ];
 
 export const productCategories: ProductCategory[] = [
+  {
+    slug: "swimming-pool-solutions",
+    title: "Swimming Pool Solutions",
+    shortTitle: "Swimming Pool Solutions",
+    seoTitle: "Swimming Pool Equipment Sourcing from India",
+    metaDescription:
+      "Source swimming pool chemicals, cleaning equipment, safety equipment, heating systems, filters, pumps, lights, and accessories from India.",
+    description:
+      "Complete swimming pool chemicals, equipment, safety systems, and accessories sourced to project and maintenance requirements.",
+    longDescription:
+      "Safar Traders coordinates sourcing for commercial, residential, and hospitality swimming pool requirements. From water-treatment chemicals and routine maintenance equipment to pumps, filters, heating, lighting, and safety essentials, we review each requirement against specification, quantity, and export suitability before preparing a quotation.",
+    buyerIntent:
+      "For pool contractors, facility managers, hospitality groups, distributors, and project buyers sourcing pool equipment and maintenance supplies from India.",
+    subcategories: [
+      {
+        slug: "swimming-pool-chemicals",
+        name: "Swimming Pool Chemicals",
+        description:
+          "Water-treatment and balancing chemicals selected for clean, safe, and consistently maintained pools across residential, commercial, and hospitality settings.",
+        examples: ["Chlorine tablets", "pH balancers", "Algaecides", "Clarifiers", "Shock treatments", "Test kits"],
+        rfqNote: "Specify pool volume, water-treatment requirement, preferred pack size, and quantity.",
+      },
+      {
+        slug: "pool-cleaning-equipment",
+        name: "Cleaning Equipment",
+        description:
+          "Reliable manual and automated cleaning equipment for routine pool-floor, wall, skimmer, and surface maintenance.",
+        examples: ["Pool vacuums", "Robotic cleaners", "Leaf nets", "Telescopic poles", "Wall brushes", "Vacuum hoses"],
+        rfqNote: "Share the pool type, dimensions, cleaning method preference, and required quantity.",
+      },
+      {
+        slug: "pool-life-saving-equipment",
+        name: "Life-Saving Equipment",
+        description:
+          "Essential poolside safety and rescue equipment for operators who need dependable emergency-response provisions.",
+        examples: ["Life rings", "Rescue hooks", "Safety ropes", "Life jackets", "First-aid kits", "Safety signage"],
+        rfqNote: "Specify the facility type, applicable safety standard, and the equipment quantities required.",
+      },
+      {
+        slug: "pool-heating-systems",
+        name: "Pool Heating Systems",
+        description:
+          "Efficient pool heating solutions to support comfortable water temperatures, seasonal use, and project-specific operating conditions.",
+        examples: ["Heat pumps", "Solar heaters", "Electric heaters", "Heat exchangers", "Temperature controls"],
+        rfqNote: "Provide pool volume, target temperature, climate, power source, and installation location.",
+      },
+      {
+        slug: "pool-filters",
+        name: "Pool Filters",
+        description:
+          "Filtration systems that support clear water quality and dependable circulation for pools of different capacities and uses.",
+        examples: ["Sand filters", "Cartridge filters", "DE filters", "Filter media", "Multiport valves"],
+        rfqNote: "Include pool volume, flow-rate requirement, filtration type, and connection specification.",
+      },
+      {
+        slug: "pool-pumps",
+        name: "Pool Pumps",
+        description:
+          "Pool circulation and booster pumps selected to match filtration demand, water features, and energy-efficiency requirements.",
+        examples: ["Variable-speed pumps", "Circulation pumps", "Booster pumps", "Spa pumps", "Pump controls"],
+        rfqNote: "Specify flow rate, head, voltage, frequency, connection size, and intended application.",
+      },
+      {
+        slug: "pool-lights",
+        name: "Pool Lights",
+        description:
+          "Durable underwater and poolside lighting systems that enhance safety, visibility, and the finished pool environment.",
+        examples: ["LED pool lights", "RGB lights", "Underwater lights", "Light controllers", "Niche fittings"],
+        rfqNote: "Share the light type, voltage, colour/control requirement, quantity, and pool construction type.",
+      },
+      {
+        slug: "pool-accessories",
+        name: "Pool Accessories",
+        description:
+          "Practical pool accessories and finishing essentials for day-to-day operation, comfort, protection, and presentation.",
+        examples: ["Pool covers", "Ladders", "Gratings", "Skimmer baskets", "Floating dispensers", "Thermometers"],
+        rfqNote: "Describe the accessory type, pool dimensions where relevant, finish preference, and quantity.",
+      },
+    ],
+    packing: ["Export cartons", "Palletized equipment", "Wooden crates for fragile or heavy units", "20 ft / 40 ft FCL", "Custom project packing"],
+    documentation: standardDocuments,
+    image: poolBannerImage,
+    imageAlt: "Modern swimming pool with clear blue water and integrated pool equipment",
+  },
   {
     slug: "metals-alloys",
     title: "Metals & Alloys",
@@ -209,7 +310,7 @@ export const productCategories: ProductCategory[] = [
     slug: "industrial-scrap-recyclable-materials",
     title: "Industrial Scrap & Recyclable Materials",
     shortTitle: "Industrial Scrap",
-    seoTitle: "Industrial Scrap & Recyclable Materials",
+    seoTitle: "Industrial Scrap Sourcing from India",
     metaDescription:
       "Source metal scrap, plastic scrap, paper and cardboard, rubber scrap, and electronic scrap from India with export coordination and documentation support.",
     description:
@@ -269,7 +370,7 @@ export const productCategories: ProductCategory[] = [
     slug: "machinery-equipment",
     title: "Machinery & Equipment",
     shortTitle: "Machinery & Equipment",
-    seoTitle: "Industrial Machinery & Equipment Sourcing from India",
+    seoTitle: "Industrial Machinery Sourcing from India",
     metaDescription:
       "Source manufacturing machinery, processing equipment, industrial tools, heavy equipment, and automation equipment from India for export.",
     description:
@@ -329,7 +430,7 @@ export const productCategories: ProductCategory[] = [
     slug: "construction-building-materials",
     title: "Construction & Building Materials",
     shortTitle: "Construction Materials",
-    seoTitle: "Construction & Building Materials Export from India",
+    seoTitle: "Building Materials Export from India",
     metaDescription:
       "Source granite, marble, natural stone, tiles, and building materials from India with export documentation and procurement coordination support.",
     description:
@@ -449,7 +550,7 @@ export const productCategories: ProductCategory[] = [
     slug: "engineering-components-hardware",
     title: "Engineering Components & Hardware",
     shortTitle: "Engineering Components",
-    seoTitle: "Engineering Components & Hardware Sourcing from India",
+    seoTitle: "Engineering Components Sourcing from India",
     metaDescription:
       "Source mechanical parts, fabricated components, industrial hardware, fasteners, and custom parts from India for industrial applications.",
     description:
@@ -463,7 +564,7 @@ export const productCategories: ProductCategory[] = [
         slug: "mechanical-parts",
         name: "Mechanical Parts",
         description:
-          "Pumps, motors, bearings, valves, gears, shafts, and related mechanical parts sourced from Indian manufacturers and authorised distributors.",
+          "Pumps, motors, bearings, valves, gears, shafts, and related mechanical parts sourced from Indian manufacturers and authorized distributors.",
         examples: ["Centrifugal pumps", "Electric motors", "Industrial bearings", "Gate valves", "Gear boxes", "Drive shafts", "Hydraulic cylinders"],
         rfqNote: "Provide part number, make / model reference, technical specification, and quantity.",
       },
@@ -509,7 +610,7 @@ export const productCategories: ProductCategory[] = [
     slug: "packaging-commercial-supplies",
     title: "Packaging & Commercial Supplies",
     shortTitle: "Packaging & Supplies",
-    seoTitle: "Packaging & Commercial Supplies Sourcing from India",
+    seoTitle: "Packaging Supplies Sourcing from India",
     metaDescription:
       "Source corrugated packaging, plastic packaging, industrial packing materials, bulk handling supplies, and commercial supplies from India.",
     description:
@@ -575,7 +676,7 @@ export const productCategories: ProductCategory[] = [
     description:
       "A structured sourcing route for buyer-led requirements outside standard categories — handled through RFQ review, supplier identification, and procurement coordination.",
     longDescription:
-      "Many international buyers need a procurement partner for products that fall outside a standard catalogue. Safar Traders reviews custom industrial sourcing requirements — covering supplier identification, procurement coordination, export documentation, and buyer-specific specifications. Submit your requirement and we will assess feasibility, supplier availability, and export handling.",
+      "Many international buyers need a procurement partner for products that fall outside a standard catalogue. Safar Traders reviews custom industrial sourcing requirements — covering supplier identification, procurement coordination, export documentation, and buyer-specific specifications. Submit your requirement and we will assess sourcing feasibility and export handling.",
     buyerIntent:
       "For procurement teams with non-standard industrial requirements, multi-product orders, or buyers establishing a new supply relationship from India.",
     subcategories: [
@@ -585,7 +686,7 @@ export const productCategories: ProductCategory[] = [
         description:
           "For requirements outside standard categories — multi-product sourcing, buyer-specified materials, or products requiring individual feasibility review.",
         examples: ["Buyer-specified products", "Multi-category orders", "Specification-based sourcing", "Non-catalogue requirements"],
-        rfqNote: "Describe your requirement as specifically as possible. We will review feasibility and revert with sourcing options.",
+        rfqNote: "Describe your requirement as specifically as possible. We will review feasibility and respond with sourcing options.",
       },
       {
         slug: "supplier-identification",
@@ -630,6 +731,3 @@ export const productCategories: ProductCategory[] = [
 export function getProductCategory(slug: string) {
   return productCategories.find((c) => c.slug === slug);
 }
-
-// legacy sub-type for any code that used the old shape
-export type ProductSubCategory = { name: string; items: string[] };

@@ -1,35 +1,34 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import ExportProcess from "@/components/ExportProcess";
-import { siteConfig } from "@/lib/site-config";
+import { createBreadcrumbSchema, createPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Our Export Process",
-  description:
-    "From RFQ to delivery — a transparent, documented export process for international buyers of industrial products.",
-  alternates: { canonical: `${siteConfig.url}/export-process` },
-};
+export const metadata: Metadata = createPageMetadata({
+  pathname: "/export-process",
+  title: "Export Process",
+  description: "Follow Safar Traders' transparent, documented export process from RFQ review through delivery for industrial buyers.",
+});
 
 const faqs = [
   {
     q: "What are your minimum order quantities?",
-    a: "Minimum quantities vary by product. As a general guide, we work with full container loads (FCL) of 20 MT and above. Contact us with your requirement and we will confirm.",
+    a: "Minimum quantities vary by product, specification, and shipment requirements. Share your requirement and we will confirm the practical order quantity.",
   },
   {
     q: "Which Incoterms do you offer?",
-    a: "We typically offer FOB (Free On Board) from Indian ports. CIF and CFR can be arranged for established relationships. Please specify your preferred Incoterms in your RFQ.",
+    a: "We typically offer FOB (Free on Board) from Indian ports. CIF and CFR may be possible depending on the requirement. Please specify your preferred Incoterms in your RFQ.",
   },
   {
     q: "What ports do you ship from?",
-    a: "We ship from major Indian ports. The specific loading port depends on product availability and routing. Your freight forwarder can advise on optimal routing.",
+    a: "We ship from major Indian ports. The specific loading port depends on sourcing feasibility and routing. Your freight forwarder can advise on optimal routing.",
   },
   {
     q: "Can we arrange third-party inspection?",
-    a: "Yes. We welcome pre-shipment inspection by SGS, Bureau Veritas, or your nominated inspector. Inspection costs are typically borne by the buyer. Please mention this in your order.",
+    a: "Yes. We welcome pre-shipment inspection by SGS, Bureau Veritas, or your nominated inspector. Inspection costs are typically borne by the buyer. Please mention this in your RFQ.",
   },
   {
     q: "What payment terms do you accept?",
-    a: "We typically work on Letter of Credit (LC) at sight or Telegraphic Transfer (TT) with an advance payment. Payment terms are confirmed during order negotiation.",
+    a: "Payment terms depend on the requirement, order value, and agreed trade terms. The proforma invoice confirms the payment schedule, currency, and banking details before production or procurement begins.",
   },
 ];
 
@@ -46,10 +45,13 @@ const faqSchema = {
   })),
 };
 
+const breadcrumbSchema = createBreadcrumbSchema([{ name: "Home" }, { name: "Export Process", pathname: "/export-process" }]);
+
 export default function ExportProcessPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <PageHero
         eyebrow="Trade Process"
         title="Transparent from first requirement to final delivery."
