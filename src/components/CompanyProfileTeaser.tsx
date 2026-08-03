@@ -4,11 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence, useReducedMotion, type PanInfo } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, BadgeCheck, FileText, ShieldCheck, X } from "lucide-react";
-import teamMashok from "@/images/company-profile/mashok.jpg";
-import teamSreeram from "@/images/company-profile/sreeram.jpg";
-import teamBhaiImg from "@/images/company-profile/bhaiimg.png";
+
+const team = ["Sriram B", "Mohammed Mashuk A", "Mohammed Yusuf M"];
 
 /**
  * Small assistive "ball" anchored to the right edge of the hero, mobile only.
@@ -107,29 +105,13 @@ export default function CompanyProfileTeaser() {
                   Safar Traders is a procurement and export partner built on R&amp;D-led sourcing, verified suppliers, and a hands-on team that stays with your order from first requirement to final document.
                 </p>
 
-                {/* Team photos */}
+                {/* Name-first team list */}
                 <div className="company-profile-team-grid" aria-label="The team">
-                  <div className="company-profile-team-member">
-                    <div className="company-profile-team-photo">
-                      <Image src={teamMashok} alt="Mashok" fill sizes="80px" style={{ objectFit: "cover" }} />
+                  {team.map((name) => (
+                    <div className="company-profile-team-member" key={name}>
+                      <span className="company-profile-team-name">{name}</span>
                     </div>
-                    <span className="company-profile-team-name">Mashok</span>
-                    <span className="company-profile-team-role">Sourcing &amp; Operations</span>
-                  </div>
-                  <div className="company-profile-team-member">
-                    <div className="company-profile-team-photo">
-                      <Image src={teamSreeram} alt="Sreeram" fill sizes="80px" style={{ objectFit: "cover" }} />
-                    </div>
-                    <span className="company-profile-team-name">Sreeram</span>
-                    <span className="company-profile-team-role">Trade &amp; Export</span>
-                  </div>
-                  <div className="company-profile-team-member">
-                    <div className="company-profile-team-photo">
-                      <Image src={teamBhaiImg} alt="Bhai" fill sizes="80px" style={{ objectFit: "cover" }} />
-                    </div>
-                    <span className="company-profile-team-name">Bhai</span>
-                    <span className="company-profile-team-role">Export &amp; Documentation</span>
-                  </div>
+                  ))}
                 </div>
 
                 <div className="company-profile-trust-list" aria-label="Company profile contents">

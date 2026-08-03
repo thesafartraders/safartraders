@@ -184,11 +184,9 @@ p { color: inherit; }
   .company-profile-dialog-eyebrow { color: var(--color-accent); font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
   .company-profile-dialog h2 { margin-top: .55rem; font-size: clamp(1.6rem, 7vw, 2.2rem); font-weight: 780; letter-spacing: -.035em; line-height: 1.1; }
   .company-profile-dialog-copy { margin-top: 1rem; color: var(--color-text-secondary); font-size: .9rem; line-height: 1.7; }
-  .company-profile-team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .85rem; margin-top: 1.25rem; width: 100%; }
-  .company-profile-team-member { display: flex; flex-direction: column; align-items: center; gap: .3rem; }
-  .company-profile-team-photo { position: relative; width: 76px; height: 76px; border-radius: 999px; overflow: hidden; border: 2px solid var(--color-border-light); flex-shrink: 0; }
-  .company-profile-team-name { font-size: .8rem; font-weight: 700; color: var(--color-text-primary); text-align: center; }
-  .company-profile-team-role { font-size: .68rem; font-weight: 500; color: var(--color-text-tertiary); text-align: center; line-height: 1.35; }
+  .company-profile-team-grid { display: grid; gap: .65rem; margin-top: 1.25rem; width: 100%; }
+  .company-profile-team-member { display: flex; align-items: center; min-height: 58px; padding: .8rem .9rem; border: 1px solid var(--color-border-light); border-radius: var(--radius-md); background: var(--color-bg-secondary); }
+  .company-profile-team-name { font-size: clamp(.95rem, 4.2vw, 1.1rem); font-weight: 780; color: var(--color-text-primary); letter-spacing: -.02em; line-height: 1.2; }
   .company-profile-trust-list { display: grid; width: 100%; gap: 0; margin-top: 1.5rem; border-top: 1px solid var(--color-border-light); }
   .company-profile-trust-list div { display: flex; align-items: center; gap: .75rem; padding: .8rem 0; border-bottom: 1px solid var(--color-border-light); color: var(--color-text-secondary); font-size: .84rem; font-weight: 600; line-height: 1.35; }
   .company-profile-trust-list div:last-child { border-bottom: 0; }

@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import PageHero from "@/components/PageHero";
 import LeadCTA from "@/components/LeadCTA";
 import { createBreadcrumbSchema, createPageMetadata } from "@/lib/seo";
 import { FlaskConical, ShieldCheck, Handshake, Globe2 } from "lucide-react";
-import teamMashok from "@/images/company-profile/mashok.jpg";
-import teamSreeram from "@/images/company-profile/sreeram.jpg";
-import teamBhaiImg from "@/images/company-profile/bhaiimg.png";
 
 export const metadata: Metadata = createPageMetadata({
   pathname: "/company-profile",
@@ -40,21 +36,9 @@ const pillars = [
 ];
 
 const team = [
-  {
-    name: "Mashok",
-    image: teamMashok,
-    role: "Sourcing & Operations",
-  },
-  {
-    name: "Sreeram",
-    image: teamSreeram,
-    role: "Trade & Export",
-  },
-  {
-    name: "Bhai",
-    image: teamBhaiImg,
-    role: "Export & Documentation",
-  },
+  { name: "Sriram B" },
+  { name: "Mohammed Mashuk A" },
+  { name: "Mohammed Yusuf M" },
 ];
 
 export default function CompanyProfilePage() {
@@ -151,36 +135,14 @@ export default function CompanyProfilePage() {
             color: "var(--color-text-primary)",
             marginBottom: "2rem",
           }}>
-            The people behind your order.
+            Meet the Safar Traders team.
           </h2>
           <div className="cp-team-grid">
             {team.map((member) => (
-              <div key={member.name} style={{ textAlign: "center" }}>
-                <div style={{
-                  position: "relative",
-                  width: "100%",
-                  aspectRatio: "1 / 1",
-                  borderRadius: "var(--radius-lg)",
-                  overflow: "hidden",
-                  border: "1px solid var(--color-border-light)",
-                  marginBottom: "1rem",
-                }}>
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    sizes="(max-width: 600px) 100vw, 33vw"
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-                <p style={{ fontSize: "1.0625rem", fontWeight: 700, color: "var(--color-text-primary)", marginBottom: "0.25rem" }}>
+              <div key={member.name} className="cp-team-member">
+                <p className="cp-team-name">
                   {member.name}
                 </p>
-                {member.role && (
-                  <p style={{ fontSize: "0.875rem", color: "var(--color-text-secondary)" }}>
-                    {member.role}
-                  </p>
-                )}
               </div>
             ))}
           </div>
@@ -212,11 +174,28 @@ export default function CompanyProfilePage() {
         .cp-team-grid {
           display: grid;
           grid-template-columns: 1fr;
-          gap: 2rem;
+          gap: 1rem;
           max-width: 800px;
+        }
+        .cp-team-member {
+          display: flex;
+          align-items: center;
+          min-height: 116px;
+          padding: 1.5rem;
+          border: 1px solid var(--color-border-light);
+          border-radius: var(--radius-lg);
+          background: var(--color-surface);
+        }
+        .cp-team-name {
+          color: var(--color-text-primary);
+          font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+          font-weight: 750;
+          letter-spacing: -.025em;
+          line-height: 1.2;
         }
         @media (min-width: 600px) {
           .cp-team-grid { grid-template-columns: repeat(3, 1fr); }
+          .cp-team-member { min-height: 150px; }
         }
       `}</style>
     </>
