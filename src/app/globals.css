@@ -1035,7 +1035,13 @@ p { color: inherit; }
 .resources-teaser-card { display: grid; gap: .85rem; overflow: hidden; border: 1px solid var(--color-border-light); border-radius: var(--radius-lg); background: white; color: var(--color-text-primary); text-decoration: none; transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
 .resources-teaser-card:hover { border-color: #c8ced6; box-shadow: 0 14px 30px rgba(17,19,21,.05); transform: translateY(-2px); }
 .resources-teaser-card .resource-label, .resources-teaser-card h3, .resources-teaser-link { margin-left: 1.2rem; margin-right: 1.2rem; }
-.resources-teaser-image { aspect-ratio: 16 / 8; }
+.resources-teaser-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 8;
+  object-fit: cover;
+}
 .resources-teaser-card h3 { font-size: 1.18rem; line-height: 1.25; }
 .resources-teaser-link { display: inline-flex; align-items: center; gap: .35rem; margin-bottom: 1.25rem; color: var(--color-accent); font-size: .86rem; font-weight: 750; }
 .resources-teaser-card:hover .resources-teaser-link { color: var(--color-accent-hover); }
