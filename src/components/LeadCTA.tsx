@@ -78,7 +78,9 @@ export default function LeadCTA() {
 
           <div className="direct-contact">
             <a href={`tel:${siteConfig.phoneRaw}`}><Phone size={15} aria-hidden="true" />{siteConfig.phone}</a>
-            <a href={`tel:${siteConfig.phoneSecondaryRaw}`}><Phone size={15} aria-hidden="true" />{siteConfig.phoneSecondary}</a>
+            {siteConfig.phoneSecondary && (
+              <a href={`tel:${siteConfig.phoneSecondaryRaw}`}><Phone size={15} aria-hidden="true" />{siteConfig.phoneSecondary}</a>
+            )}
             <a href={`mailto:${siteConfig.email}`}><Mail size={15} aria-hidden="true" />{siteConfig.email}</a>
             <a href={waLink(siteConfig.whatsappRaw, "Hello Safar Traders, I'd like to discuss a sourcing/export requirement.")} target="_blank" rel="noopener noreferrer"><MessageCircle size={15} aria-hidden="true" />WhatsApp requirement</a>
           </div>

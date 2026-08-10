@@ -45,6 +45,8 @@ export default function Hero() {
               for non-perishable industrial and commercial requirements.
             </p>
 
+            <p className="hero-tagline">Trade with your Trusted partner.</p>
+
             <div className="hero-actions">
               <RFQWizardLauncher label="Request a Quote" className="btn btn-primary btn-lg" />
               <Link href="/products" className="btn btn-secondary btn-lg">

@@ -33,10 +33,10 @@ export default function ContactPage() {
             { label: "Location", value: `${siteConfig.address.city}, ${siteConfig.address.state}, ${siteConfig.address.country}` },
             { label: "Trade email", value: siteConfig.email, href: `mailto:${siteConfig.email}` },
             { label: "Phone", value: siteConfig.phone, href: `tel:${siteConfig.phoneRaw}` },
-            { label: "Secondary phone", value: siteConfig.phoneSecondary, href: `tel:${siteConfig.phoneSecondaryRaw}` },
+            siteConfig.phoneSecondary ? { label: "Secondary phone", value: siteConfig.phoneSecondary, href: `tel:${siteConfig.phoneSecondaryRaw}` } : null,
             { label: "WhatsApp", value: siteConfig.whatsapp, href: waLink(siteConfig.whatsappRaw, "Hello Safar Traders, I'd like to discuss a sourcing requirement.") },
             { label: "Buyer note", value: "For accurate review, include specification, quantity, destination, and required timeline." },
-          ].map(({ label, value, href }) => (
+          ].filter((item): item is NonNullable<typeof item> => item !== null).map(({ label, value, href }) => (
             <div key={label}>
               <p className="eyebrow">{label}</p>
               {href ? <a href={href} className="contact-dark-link">{value}</a> : <p className="contact-dark-text">{value}</p>}

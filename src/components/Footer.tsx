@@ -4,7 +4,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { productCategories } from "@/lib/products";
 import { siteConfig } from "@/lib/site-config";
 import { waLink } from "@/lib/whatsapp";
-import logo from "@/images/safartraders.webp";
+import logo from "@/images/safartraders-logo.webp";
 import RFQWizardLauncher from "./RFQWizardLauncher";
 
 const companyLinks = [
@@ -27,7 +27,9 @@ export default function Footer() {
           <p>Trade and export partner for buyers sourcing non-perishable industrial and commercial goods — procurement coordination, documentation support, and supply handling from India.</p>
           <div className="footer-contact-list">
             <a href={`tel:${siteConfig.phoneRaw}`}><Phone size={14} aria-hidden="true" />{siteConfig.phone}</a>
-            <a href={`tel:${siteConfig.phoneSecondaryRaw}`}><Phone size={14} aria-hidden="true" />{siteConfig.phoneSecondary}</a>
+            {siteConfig.phoneSecondary && (
+              <a href={`tel:${siteConfig.phoneSecondaryRaw}`}><Phone size={14} aria-hidden="true" />{siteConfig.phoneSecondary}</a>
+            )}
             <a href={`mailto:${siteConfig.email}`}><Mail size={14} aria-hidden="true" />{siteConfig.email}</a>
             <span><MapPin size={14} aria-hidden="true" />{siteConfig.address.city}, {siteConfig.address.state}, {siteConfig.address.country}</span>
           </div>

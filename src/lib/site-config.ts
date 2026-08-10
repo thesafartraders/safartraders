@@ -6,19 +6,20 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://safartraders.com",
   lastModified: "2026-08-03",
   ogImage: "/og-image.jpg",
-  phone: "+91 75400 02039",
-  phoneRaw: "+917540002039",
-  phoneSecondary: "+91 75400 02038",
-  phoneSecondaryRaw: "+917540002038",
-  whatsapp: "+917540002039",
-  whatsappRaw: "917540002039",
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "thesafartraders@gmail.com",
+  phone: "+91 63813 72810",
+  phoneRaw: "+916381372810",
+  // Optional second contact number. Leave undefined to hide it everywhere it's used.
+  phoneSecondary: undefined as string | undefined,
+  phoneSecondaryRaw: undefined as string | undefined,
+  whatsapp: "+91 63813 72810",
+  whatsappRaw: "916381372810",
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "safartradersofficials@gmail.com",
   legal: {
     privacyPolicyUrl: "/privacy-policy",
     termsUrl: "/terms-and-conditions",
     // Configure these from verified business records before publishing them.
     entityName: process.env.NEXT_PUBLIC_LEGAL_ENTITY_NAME || "Safar Traders",
-    grievanceEmail: process.env.NEXT_PUBLIC_GRIEVANCE_EMAIL || process.env.NEXT_PUBLIC_CONTACT_EMAIL || "thesafartraders@gmail.com",
+    grievanceEmail: process.env.NEXT_PUBLIC_GRIEVANCE_EMAIL || process.env.NEXT_PUBLIC_CONTACT_EMAIL || "safartradersofficials@gmail.com",
   },
   address: {
     city: "Chennai",

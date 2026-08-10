@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { siteConfig } from "@/lib/site-config";
-import logo from "@/images/safartraders.webp";
+import logo from "@/images/safartraders-logo.webp";
 import RFQWizardLauncher from "./RFQWizardLauncher";
 
 export default function Header() {

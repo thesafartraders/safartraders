@@ -11,8 +11,8 @@ import { siteConfig } from "@/lib/site-config";
  *   SMTP_PORT=587
  *   SMTP_USER=your-smtp-username
  *   SMTP_PASS=your-smtp-password
- *   LEAD_NOTIFY_EMAIL=thesafartraders@gmail.com   (where leads are sent; defaults to siteConfig.email)
- *   LEAD_FROM_EMAIL="Safar Traders Website <thesafartraders@gmail.com>" (must be a verified sender for your SMTP provider)
+ *   LEAD_NOTIFY_EMAIL=safartradersofficials@gmail.com   (where leads are sent; defaults to siteConfig.email)
+ *   LEAD_FROM_EMAIL="Safar Traders Website <safartradersofficials@gmail.com>" (must be a verified sender for your SMTP provider)
  *
  * Any standard SMTP provider works: Resend, Postmark, SendGrid, Amazon SES,
  * Zoho Mail, Google Workspace, etc. Just fill in the host/port/user/pass
