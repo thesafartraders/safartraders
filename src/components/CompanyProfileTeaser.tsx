@@ -6,7 +6,10 @@ import { motion, AnimatePresence, useReducedMotion, type PanInfo } from "framer-
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, FileText, ShieldCheck, X } from "lucide-react";
 
-const team = ["Sriram B", "Mohammed Mashuk A", "Mohammed Yusuf M"];
+const team = [
+  // "Sriram B", 
+  "Mohammed Mashuk A", 
+  "Mohammed Yusuf M"];
 
 /**
  * Small assistive "ball" anchored to the right edge of the hero, mobile only.

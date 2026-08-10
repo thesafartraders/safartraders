@@ -726,7 +726,7 @@ p { color: inherit; }
 .footer-logo-link { display: inline-flex; align-items: center; justify-content: center; width: 300px; height: 138px; overflow: hidden; text-decoration: none; background: white; border-radius: .85rem; box-shadow: 0 18px 38px rgba(0,0,0,.22); }
 .footer-logo { width: auto; height: 104px; max-width: 90%; display: block; object-fit: contain; }
 .footer-contact-list { display: grid; gap: .55rem; }
-.footer-contact-list a, .footer-contact-list span { display: inline-flex; align-items: center; gap: .55rem; color: var(--color-dark-muted); text-decoration: none; font-size: .9rem; }
+.footer-contact-list a, .footer-contact-list span { display: inline-flex; align-items: center; gap: .55rem; color: var(--color-dark-muted); text-decoration: none; font-size: .9rem; white-space: nowrap; }
 .footer-contact-list svg { color: var(--color-dark-text); }
 .footer-heading { margin-bottom: .85rem; color: white; font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
 .site-footer ul { display: grid; gap: .55rem; list-style: none; }
