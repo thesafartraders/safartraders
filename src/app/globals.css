@@ -906,12 +906,11 @@ p { color: inherit; }
     grid-template-columns: 1fr 1fr;
     gap: 1rem .85rem;
   }
-  .footer-brand { grid-column: 1 / -1; }
+  .footer-brand { grid-column: 1 / -1; text-align: center; }
   .footer-brand p { display: none; }
   .footer-logo-link { width: 230px; height: 106px; }
   .footer-logo { height: 80px; }
-  .footer-contact-list { grid-template-columns: 1fr 1fr; gap: .28rem .65rem; margin-top: .6rem; }
-  .footer-contact-list span { grid-column: 1 / -1; }
+  .footer-contact-list { grid-template-columns: 1fr; gap: .4rem; margin-top: .6rem; justify-items: center; }
   .footer-contact-list a, .footer-contact-list span { font-size: .76rem; line-height: 1.35; }
   .footer-contact-list svg { width: 12px; height: 12px; }
   .footer-heading { margin-bottom: .38rem; font-size: .62rem; }
